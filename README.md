@@ -4,8 +4,8 @@
 
 ## Documentation
 
-[Project Specification]()
+[Project Specification](https://github.com/lenbie/Connect4AI/blob/main/documentation/ProjectSpecification.md)
 
 ### Weekly Reports
 
-[Week 1 Report]()
+[Week 1 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week1Report.md)
