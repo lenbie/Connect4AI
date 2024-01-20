@@ -1,6 +1,6 @@
 # Connect4AI
 
-## This project is part of the Algorithms and AI Lab course at the University of Helsinki
+*This project is part of the Algorithms and AI Lab course at the University of Helsinki*
 
 ## Documentation
 
