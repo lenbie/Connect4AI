@@ -178,12 +178,19 @@ class Board:
         return True
     
     def clear_board(self):
-        """Empties whole board.
+        """Empties whole board
         """
         self._board = [[0 for i in range(WIDTH)] for j in range(HEIGHT)] 
         
     def check_square(self, row_index, column_index):
+        """Returns the content of a specified square
 
+        Args:
+            row_index (int): integer representing the chosen row
+            column_index (int): integer representing the chosen column
+        Returns:
+            The content of the specified square (int)
+        """
         return self._board[row_index][column_index]
         
         
@@ -197,11 +204,7 @@ if __name__ == "__main__":
     board.make_move(1, 1)
     board.make_move(3, 1)
     board.make_move(3, 1)
-    board.make_move(3,2)
-    board.make_move(3,1)
-    board.make_move(0, 1)
-
-
-
-
+    board.make_move(1, 2)
+    board.make_move(1, 1)
+    board.make_move(4, 1)
     board.show_board()

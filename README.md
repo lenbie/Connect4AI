@@ -11,6 +11,10 @@
 [Week 1 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week1Report.md)
 
 
+## Running the project
+
+Note that Python version 3.10.12 was used for creating and testing this project.
+
 ## Command Line Functions
 
 ### Testing
