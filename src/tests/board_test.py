@@ -2,6 +2,7 @@ import unittest
 
 from board import Board
 
+
 class TestBoard(unittest.TestCase):
     def setUp(self):
         self.test_board = Board()
@@ -31,7 +32,7 @@ class TestBoard(unittest.TestCase):
         board = self.test_board._board
 
         self.assertEqual(board, correct_board)
-    
+
     def test_valid_move(self):
         self.test_board.clear_board()
 
@@ -41,7 +42,7 @@ class TestBoard(unittest.TestCase):
         self.test_board._board[2][3] = 2
         self.test_board._board[1][3] = 2
         self.test_board._board[0][3] = 2
-        
+
         invalid_move = self.test_board._check_valid_move(3)
 
         self.assertEqual(invalid_move, False)
@@ -55,7 +56,7 @@ class TestBoard(unittest.TestCase):
         win = self.test_board._check_row(5, 5, 1)
 
         self.assertEqual(win, True)
-    
+
     def test_check_row_no_win(self):
         self.test_board.clear_board()
 
@@ -65,7 +66,7 @@ class TestBoard(unittest.TestCase):
         win = self.test_board._check_row(5, 5, 1)
 
         self.assertEqual(win, False)
-   
+
     def test_check_column_win(self):
         self.test_board.clear_board()
 
@@ -75,7 +76,7 @@ class TestBoard(unittest.TestCase):
         win = self.test_board._check_column(2, 2, 1)
 
         self.assertEqual(win, True)
-    
+
     def test_check_column_no_win(self):
         self.test_board.clear_board()
 
@@ -85,7 +86,7 @@ class TestBoard(unittest.TestCase):
         win = self.test_board._check_column(2, 2, 1)
 
         self.assertEqual(win, False)
-   
+
     def test_check_left_lower_diagonal(self):
         self.test_board.clear_board()
 
@@ -98,10 +99,10 @@ class TestBoard(unittest.TestCase):
         self.test_board.make_move(3, 1)
         self.test_board.make_move(3, 2)
         self.test_board.make_move(0, 1)
-    
+
         win = self.test_board._check_diagonals(2, 3, 1)
         self.assertEqual(win, True)
-    
+
     def test_check_right_upper_diagonal(self):
         self.test_board.clear_board()
 
@@ -114,10 +115,10 @@ class TestBoard(unittest.TestCase):
         self.test_board.make_move(3, 1)
         self.test_board.make_move(3, 2)
         self.test_board.make_move(3, 1)
-    
+
         win = self.test_board._check_diagonals(5, 0, 1)
         self.assertEqual(win, True)
-    
+
     def test_check_left_upper_diagonal(self):
         self.test_board.clear_board()
 
@@ -133,7 +134,7 @@ class TestBoard(unittest.TestCase):
 
         win = self.test_board._check_diagonals(5, 4, 1)
         self.assertEqual(win, True)
-    
+
     def test_check_right_lower_diagonal(self):
         self.test_board.clear_board()
 
@@ -149,4 +150,3 @@ class TestBoard(unittest.TestCase):
 
         win = self.test_board._check_diagonals(2, 1, 1)
         self.assertEqual(win, True)
-        

@@ -3,6 +3,7 @@
 WIDTH = 7
 HEIGHT = 6
 
+
 class Board:
 
     """ This class creates the game board, enables making moves on the board,
@@ -13,8 +14,9 @@ class Board:
     def __init__(self):
         """Class constructor                
         """
-        self._board = [[0 for i in range(WIDTH)] for j in range(HEIGHT)] #0 represents empty cell
-        self.win = False #Represents whether the current player has won
+        self._board = [[0 for i in range(WIDTH)] for j in range(
+            HEIGHT)]  # 0 represents empty cell
+        self.win = False  # Represents whether the current player has won
 
     def show_board(self):
         """Temporary board representation to print it to command line for manual tests,
@@ -22,7 +24,7 @@ class Board:
         """
         for row in self._board:
             print(row)
-    
+
     def _check_valid_move(self, column_index):
         """Checks if a token can be dropped into the chosen column
         Args:
@@ -34,9 +36,8 @@ class Board:
         """
         if self._board[0][column_index] == 0:
             return True
-        else:
-            return False
-    
+        return False
+
     def make_move(self, column_index, current_player):
         """Makes a move if it is valid and no one has won yet.
 
@@ -65,7 +66,7 @@ class Board:
             row (int): The row containing the highest free square in the given column
         """
         for row in range(5, 0, -1):
-            if self._board[row][column_index] == 0:     
+            if self._board[row][column_index] == 0:
                 return row
 
     def _check_four_connected(self, column_index, current_player):
@@ -84,9 +85,9 @@ class Board:
 
         if self._check_row(row_index, column_index, current_player):
             return True
-        elif self._check_column(row_index, column_index, current_player):
+        if self._check_column(row_index, column_index, current_player):
             return True
-        elif self._check_diagonals(row_index, column_index, current_player):
+        if self._check_diagonals(row_index, column_index, current_player):
             return True
 
         return False
@@ -104,17 +105,17 @@ class Board:
             True, if the specified move leads to win in that row
             False, if not
         """
-        if column_index <=3:
+        if column_index <= 3:
             for column in range(column_index+1, column_index+4):
                 if self._board[row_index][column] != current_player:
                     return False
             return True
-        elif column_index >=3:
+        if column_index >= 3:
             for column in range(column_index-1, column_index-4, -1):
                 if self._board[row_index][column] != current_player:
                     return False
             return True
- 
+
     def _check_column(self, row_index, column_index, current_player):
         """"Checks if placing a token into the specified square will lead
            the current player to have four tokens in the same column
@@ -128,16 +129,15 @@ class Board:
             True, if the specified move leads to win in that column
             False, if not
         """
-        if row_index <=2:
+        if row_index <= 2:
             for row in range(row_index+1, row_index+4):
                 if self._board[row][column_index] != current_player:
                     return False
-            return True
-        elif row_index >2:
+        if row_index > 2:
             for row in range(row_index-1, row_index-4, -1):
                 if self._board[row][column_index] != current_player:
                     return False
-            return True
+        return True
 
     def _check_diagonals(self, row_index, column_index, current_player):
         """"Checks if placing a token into the specified square will lead
@@ -152,36 +152,36 @@ class Board:
             True, if the specified move leads to win on a diagnoal
             False, if not
         """
-        #left diagonals
+        # left diagonals
         if column_index - 3 >= 0:
             if row_index - 3 >= 0:
                 for num in range(1, 4):
                     if self._board[row_index-num][column_index - num] != current_player:
                         return False
-            if row_index + 3 <=5:
+            if row_index + 3 <= 5:
                 for num in range(1, 4):
                     if self._board[row_index+num][column_index - num] != current_player:
                         return False
-                    
-        #right diagonals
-        elif column_index + 3 <=6:
+
+        # right diagonals
+        elif column_index + 3 <= 6:
             if row_index - 3 >= 0:
                 for num in range(1, 4):
                     if self._board[row_index-num][column_index + num] != current_player:
                         return False
-                    
-            if row_index + 3 <=5:
+
+            if row_index + 3 <= 5:
                 for num in range(1, 4):
-                    if self._board[row_index+num][column_index +num] != current_player:
+                    if self._board[row_index+num][column_index + num] != current_player:
                         return False
-                    
+
         return True
-    
+
     def clear_board(self):
         """Empties whole board
         """
-        self._board = [[0 for i in range(WIDTH)] for j in range(HEIGHT)] 
-        
+        self._board = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
+
     def check_square(self, row_index, column_index):
         """Returns the content of a specified square
 
@@ -192,8 +192,7 @@ class Board:
             The content of the specified square (int)
         """
         return self._board[row_index][column_index]
-        
-        
+
 
 if __name__ == "__main__":
     board = Board()
