@@ -10,6 +10,7 @@
 
 [Week 1 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week1Report.md)
 
+[Week 2 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week2Report.md)
 
 ## Running the project
 
