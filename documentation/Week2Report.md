@@ -6,3 +6,5 @@ Poetry for managing dependencies. I implemented the game board (Board class), wh
 I also started thinking about how to set up the rest of the game. The next step will be to create a simple UI using Pygame, which I started learning about this week as well. Then, I will know how exactly the game loop is managed and the player input is got, and then I can bring the player input, the AI moves and the board together in a Game class to manage the game play. Also, I aim to implement a basic version of the Minimax algorithm, so the game can be played to some extent, before improving upon the AI in later weeks.
 
 I also set up pytest for testing, and wrote tests for the Board class. I also made docstring documentation for the implemented class, and I set up pylint for code quality checks. I also created tasks, so it is possible to get test and code quality reports using the command line, although this may not work yet for someone else downloading the project, but it will in future weeks.
+
+Time spent: 7 hours
