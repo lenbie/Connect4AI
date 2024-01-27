@@ -15,6 +15,16 @@
 
 Note that Python version 3.10.12 was used for creating and testing this project.
 
+
+## Installation
+
+1. Install dependencies through command line using:
+
+```bash
+poetry install
+```
+
+
 ## Command Line Functions
 
 ### Testing
