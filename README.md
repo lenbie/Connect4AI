@@ -12,6 +12,8 @@
 
 [Week 2 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week2Report.md)
 
+[Week 3 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week3Report.md)
+
 ## Running the project
 
 Note that Python version 3.10.12 was used for creating and testing this project.
