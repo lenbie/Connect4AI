@@ -17,6 +17,7 @@ class Board:
         self._board = [[0 for i in range(WIDTH)] for j in range(
             HEIGHT)]  # 0 represents empty cell
         self.win = False  # Represents whether the current player has won
+        self.move_count = 0
 
     def show_board(self):
         """Temporary board representation to print it to command line for manual tests,
@@ -54,6 +55,19 @@ class Board:
 
                 free_row = self._check_highest_square(column_index)
                 self._board[free_row][column_index] = current_player
+                self.move_count+=1
+                return True
+            return False
+    
+    def undo_move(self, column_index):
+        """Unmakes the most recent move.
+
+        Args:
+            column_index (int): integer representing the chosen column
+            current_player (int): player number 1 or 2 representing the current player
+        """ 
+        free_row = self._check_highest_square(column_index)
+        self._board[free_row+1][column_index] = 0
 
     def _check_highest_square(self, column_index):
         """Checks which square in the column is the highest free one,
@@ -181,6 +195,8 @@ class Board:
         """Empties whole board
         """
         self._board = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
+        self.win = False
+        self.move_count = 0
 
     def check_square(self, row_index, column_index):
         """Returns the content of a specified square
