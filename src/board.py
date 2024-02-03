@@ -25,6 +25,7 @@ class Board:
         """
         for row in self._board:
             print(row)
+        print("")
 
     def _check_valid_move(self, column_index):
         """Checks if a token can be dropped into the chosen column
@@ -35,8 +36,9 @@ class Board:
             True, if the column is not full yet
             False, if the column is already full
         """
-        if self._board[0][column_index] == 0:
-            return True
+        if column_index >= 0 and column_index <= 6:
+            if self._board[0][column_index] == 0:
+                return True
         return False
 
     def make_move(self, column_index, current_player):
@@ -51,7 +53,6 @@ class Board:
             if self._check_valid_move(column_index):
                 if self._check_four_connected(column_index, current_player):
                     self.win = True
-                    print(f"Player {current_player} wins")
 
                 free_row = self._check_highest_square(column_index)
                 self._board[free_row][column_index] = current_player
@@ -66,8 +67,16 @@ class Board:
             column_index (int): integer representing the chosen column
             current_player (int): player number 1 or 2 representing the current player
         """ 
-        free_row = self._check_highest_square(column_index)
-        self._board[free_row+1][column_index] = 0
+        if self._check_valid_move(column_index):
+            free_row = self._check_highest_square(column_index)
+            #self.show_board()
+            #print(f"Col index {column_index}")
+            #print(free_row)
+            self._board[free_row + 1][column_index] = 0
+        else:
+            self._board[0][column_index] = 0
+        self.move_count -= 1
+
 
     def _check_highest_square(self, column_index):
         """Checks which square in the column is the highest free one,
@@ -79,8 +88,9 @@ class Board:
         Returns:
             row (int): The row containing the highest free square in the given column
         """
-        for row in range(5, 0, -1):
+        for row in range(5, -1, -1):
             if self._board[row][column_index] == 0:
+                print(row)
                 return row
 
     def _check_four_connected(self, column_index, current_player):
@@ -212,14 +222,9 @@ class Board:
 
 if __name__ == "__main__":
     board = Board()
-    board.make_move(1, 1)
-    board.make_move(2, 2)
-    board.make_move(2, 1)
-    board.make_move(2, 1)
+    board.make_move(0, 1)
     board.make_move(1, 1)
     board.make_move(3, 1)
-    board.make_move(3, 1)
-    board.make_move(1, 2)
-    board.make_move(1, 1)
-    board.make_move(4, 1)
+    win = board._check_four_connected(2, 1)
+    print(win)
     board.show_board()

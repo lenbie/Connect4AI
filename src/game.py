@@ -20,45 +20,71 @@ class Game:
 
         self._human_player = 1 #human goes first by default
         self._AI_player = 2
-        self._choice = False
-        self._move = False
 
-        self._move_count = 0 
+        self._win = False
 
-    def _make_move(self):
-        pass
+    def play_game(self):
+        self._select_start_player()
 
-    def ai_move(self):
-        column = self._ai.random_move() #AI class returning column of desired move
-        player = self._AI_player
+        if self._human_player == 1:
+            while not self._win:
+                self._player_move()
+                if not self._win:
+                    self._ai_move()
 
-        while not self._move:  #actually this loop doesnt make sense bc will need new number from the AI if move doesnt work 
-            move = self._board.make_move(column, player)
-            if move:
-                self._move = True
-                self._move_count += 1
         
+        if self._AI_player == 1:
+            while not self._win:
+                self._ai_move()
+                if not self._win:
+                    self._player_move()
+            
+        print("Win!")
+
+    def _ai_move(self):
+        player = self._AI_player
+        move = self._ai.next_move(player)
+
+        self._win = self._board._check_four_connected(move, player)
+        print(self._win)
+
+        self._board.make_move(move, player)
+
+        self._board.show_board()
+
+    def _player_move(self):
+        player = self._human_player
+
+        choice = False
+        while not choice:
+            col = (input("Into which column from 0 to 6 do you want to make a move? "))
+            try:
+                number = int(col)
+                if 0 <= number <= 6:
+                    self._win = self._board._check_four_connected(number, player)
+                    print(self._win)
+                    move = self._board.make_move(number, player)
+                    if move:
+                        choice = True
+                else:
+                    print("Input is not between 0 and 6.")
+            except ValueError:
+                print("Input is not a valid integer.")
+
+
         self._board.show_board()
 
 
-    def player_move(self):
-        pass
-
-    def select_start_player(self): #UI function #player 1 starts, human selects if they are player 1 or 2s
+    def _select_start_player(self): #UI function #player 1 starts, human selects if they are player 1 or 2s
         print("Do you want to play as Player 1 or Player 2?")
-        while not self._choice:
+        choice = False
+        while not choice:
             player_choice = str(input("Please enter 1 for Player 1, or 2 for player 2: "))
             if player_choice == "1":
-                self._choice = True
+                choice = True
+
             if player_choice == "2":
                 self._human_player = 2
                 self._AI_player = 1
-                self._choice = True
+                choice = True
 
-
-if __name__ == "__main__":
-    board = Board()
-    ai = AI()
-    game = Game(board, ai)
-    #game.select_start_player()
-    game.ai_move()
