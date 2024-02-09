@@ -14,20 +14,21 @@ class Board:
     def __init__(self):
         """Class constructor                
         """
-        self._board = [[0 for i in range(WIDTH)] for j in range(
+        self.board = [[0 for i in range(WIDTH)] for j in range(
             HEIGHT)]  # 0 represents empty cell
-        self.win = False  # Represents whether the current player has won
+        self.win = False #if anyone has won, but idk if needed
         self.move_count = 0
+        self.winner = None
 
     def show_board(self):
         """Temporary board representation to print it to command line for manual tests,
             before UI has been implemented.
         """
-        for row in self._board:
+        for row in self.board:
             print(row)
         print("")
 
-    def _check_valid_move(self, column_index):
+    def check_valid_move(self, column_index):
         """Checks if a token can be dropped into the chosen column
         Args:
             column_index (int): the integer representing the chosen column
@@ -36,8 +37,8 @@ class Board:
             True, if the column is not full yet
             False, if the column is already full
         """
-        if column_index >= 0 and column_index <= 6:
-            if self._board[0][column_index] == 0:
+        if column_index >= 0 and column_index <=6:
+            if self.board[0][column_index] == 0:
                 return True
         return False
 
@@ -50,33 +51,26 @@ class Board:
         """
 
         if not self.win:
-            if self._check_valid_move(column_index):
-                if self._check_four_connected(column_index, current_player):
-                    self.win = True
-
+            if self.check_valid_move(column_index):
                 free_row = self._check_highest_square(column_index)
-                self._board[free_row][column_index] = current_player
-                self.move_count+=1
+                self.board[free_row][column_index] = current_player
+                self.move_count += 1
                 return True
-            return False
-    
+        return False
+
     def undo_move(self, column_index):
         """Unmakes the most recent move.
 
         Args:
             column_index (int): integer representing the chosen column
             current_player (int): player number 1 or 2 representing the current player
-        """ 
-        if self._check_valid_move(column_index):
+        """
+        if self.check_valid_move(column_index):
             free_row = self._check_highest_square(column_index)
-            #self.show_board()
-            #print(f"Col index {column_index}")
-            #print(free_row)
-            self._board[free_row + 1][column_index] = 0
+            self.board[free_row + 1][column_index] = 0
         else:
-            self._board[0][column_index] = 0
+            self.board[0][column_index] = 0
         self.move_count -= 1
-
 
     def _check_highest_square(self, column_index):
         """Checks which square in the column is the highest free one,
@@ -89,11 +83,11 @@ class Board:
             row (int): The row containing the highest free square in the given column
         """
         for row in range(5, -1, -1):
-            if self._board[row][column_index] == 0:
-                print(row)
+            if self.board[row][column_index] == 0:
                 return row
 
-    def _check_four_connected(self, column_index, current_player):
+    # idk if current player check necessary
+    def check_four_connected(self, current_player):
         """Checks if the specified move will lead the current player to win.
             Calls functions to check if there will be four in a row, a column or a diagonal.
 
@@ -105,108 +99,78 @@ class Board:
             True, if the current player will win on the specified move
             False, if no win can be achieved on this move.
         """
-        row_index = self._check_highest_square(column_index)
-
-        if self._check_row(row_index, column_index, current_player):
+        if current_player == self._check_all_rows() or current_player == self._check_all_cols() or current_player == self._check_diag_whole_board():
+            self.winner = current_player
             return True
-        if self._check_column(row_index, column_index, current_player):
-            return True
-        if self._check_diagonals(row_index, column_index, current_player):
-            return True
-
         return False
 
-    def _check_row(self, row_index, column_index, current_player):
-        """Checks if placing a token into the specified square will lead
-           the current player to have four tokens in the same row
+    def _check_all_cols(self):
+        for row in range(3):
+            for col in range(7):
+                if self.board[row][col] != 0:
+                    if self._check_col(row, col):
+                        winner = self.board[row][col]
+                        return winner
 
-        Args:
-            row_index (int): integer representing the chosen row
-            column_index (int): integer representing the chosen column
-            current_player (int): player number 1 or 2 representing the current player
-
-        Returns:
-            True, if the specified move leads to win in that row
-            False, if not
-        """
-        if column_index <= 3:
-            for column in range(column_index+1, column_index+4):
-                if self._board[row_index][column] != current_player:
-                    return False
-            return True
-        if column_index >= 3:
-            for column in range(column_index-1, column_index-4, -1):
-                if self._board[row_index][column] != current_player:
-                    return False
-            return True
-
-    def _check_column(self, row_index, column_index, current_player):
-        """"Checks if placing a token into the specified square will lead
-           the current player to have four tokens in the same column
-
-        Args:
-            row_index (int): integer representing the chosen row
-            column_index (int): integer representing the chosen column
-            current_player (int): player number 1 or 2 representing the current player
-
-        Returns:
-            True, if the specified move leads to win in that column
-            False, if not
-        """
-        if row_index <= 2:
-            for row in range(row_index+1, row_index+4):
-                if self._board[row][column_index] != current_player:
-                    return False
-        if row_index > 2:
-            for row in range(row_index-1, row_index-4, -1):
-                if self._board[row][column_index] != current_player:
-                    return False
+    def _check_col(self, row, col):
+        piece = self.board[row][col]
+        for i in range(1, 4):
+            if self.board[row+i][col] != piece:
+                return False
         return True
 
-    def _check_diagonals(self, row_index, column_index, current_player):
-        """"Checks if placing a token into the specified square will lead
-           the current player to have four tokens on any diagnoal
+    def _check_all_rows(self):
+        for col in range(4):
+            for row in range(6):
+                if self.board[row][col] != 0:
+                    if self._check_row(row, col):
+                        winner = self.board[row][col]
+                        return winner
 
-        Args:
-            row_index (int): integer representing the chosen row
-            column_index (int): integer representing the chosen column
-            current_player (int): player number 1 or 2 representing the current player
+    def _check_row(self, row, col):
+        piece = self.board[row][col]
+        for i in range(1, 4):
+            if self.board[row][col+i] != piece:
+                return False
+        return True
 
-        Returns:
-            True, if the specified move leads to win on a diagnoal
-            False, if not
-        """
-        # left diagonals
-        if column_index - 3 >= 0:
-            if row_index - 3 >= 0:
-                for num in range(1, 4):
-                    if self._board[row_index-num][column_index - num] != current_player:
-                        return False
-            if row_index + 3 <= 5:
-                for num in range(1, 4):
-                    if self._board[row_index+num][column_index - num] != current_player:
-                        return False
+    def _check_diag_whole_board(self):  # make sure only 1 winner possible
+        for row in range(0, 3):
+            for col in range(0, 4):
+                # see if we need this, or getting player as input
+                if self.board[row][col] != 0:
+                    if self._check_right_diagonals(row, col):
+                        winner = self.board[row][col]
+                        return winner  # return True or winner? currently returns None if no winner
 
-        # right diagonals
-        elif column_index + 3 <= 6:
-            if row_index - 3 >= 0:
-                for num in range(1, 4):
-                    if self._board[row_index-num][column_index + num] != current_player:
-                        return False
+        for row in range(5, 2, -1):
+            for col in range(0, 4):
+                if self.board[row][col] != 0:
+                    if self._check_left_diagonals(row, col):
+                        winner = self.board[row][col]
+                        return winner  # return True or winner?
 
-            if row_index + 3 <= 5:
-                for num in range(1, 4):
-                    if self._board[row_index+num][column_index + num] != current_player:
-                        return False
+    def _check_right_diagonals(self, row, col):
+        piece = self.board[row][col]
+        for i in range(1, 4):
+            if self.board[row+i][col+i] != piece:
+                return False
+        return True
 
+    def _check_left_diagonals(self, row, col):
+        piece = self.board[row][col]
+        for i in range(1, 4):
+            if self.board[row-i][col+i] != piece:
+                return False
         return True
 
     def clear_board(self):
         """Empties whole board
         """
-        self._board = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
+        self.board = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
         self.win = False
         self.move_count = 0
+        self.winner = None
 
     def check_square(self, row_index, column_index):
         """Returns the content of a specified square
@@ -217,14 +181,16 @@ class Board:
         Returns:
             The content of the specified square (int)
         """
-        return self._board[row_index][column_index]
+        return self.board[row_index][column_index]
 
 
 if __name__ == "__main__":
-    board = Board()
-    board.make_move(0, 1)
-    board.make_move(1, 1)
-    board.make_move(3, 1)
-    win = board._check_four_connected(2, 1)
+    testboard = Board()
+    testboard.make_move(2, 1)
+    testboard.make_move(3, 1)
+    testboard.make_move(4, 2)
+    testboard.make_move(5, 2)
+    win = testboard._check_row(5, 2)
+    testboard.show_board()
     print(win)
-    board.show_board()
+    # print(board.check_four_connected(1))
