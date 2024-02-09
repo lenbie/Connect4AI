@@ -33,7 +33,7 @@ class AI:
         else:
             current_player = 2
 
-        #for move in self.get_possible_moves():
+        # for move in self.get_possible_moves():
         #   if self.board.check_valid_move(move) and
         if self.board.check_four_connected(current_player):
             if current_player == 1:
@@ -55,14 +55,13 @@ class AI:
 
             return value
 
-        else:
-            value = 999999
-            for move in self.get_possible_moves():
-                self.board.make_move(move, current_player)
-                value = min(value, self.minimax(depth-1, True))
-                self.board.undo_move(move)
+        value = 999999
+        for move in self.get_possible_moves():
+            self.board.make_move(move, current_player)
+            value = min(value, self.minimax(depth-1, True))
+            self.board.undo_move(move)
 
-            return value
+        return value
 
     def get_possible_moves(self):
         moves = set()
@@ -94,7 +93,7 @@ class AI:
 
         nodes_other = 0
         degree_count_other = 0
-        for key, value in graph_other.items():
+        for value in graph_other.items():
             nodes_other += 1
             degree_count_other += len(value)
 

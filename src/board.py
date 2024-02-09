@@ -16,7 +16,7 @@ class Board:
         """
         self.board = [[0 for i in range(WIDTH)] for j in range(
             HEIGHT)]  # 0 represents empty cell
-        self.win = False #if anyone has won, but idk if needed
+        self.win = False  # if anyone has won, but idk if needed
         self.move_count = 0
         self.winner = None
 
@@ -37,7 +37,7 @@ class Board:
             True, if the column is not full yet
             False, if the column is already full
         """
-        if column_index >= 0 and column_index <=6:
+        if 0 <= column_index <= 6:
             if self.board[0][column_index] == 0:
                 return True
         return False

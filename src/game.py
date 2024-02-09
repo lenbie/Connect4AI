@@ -19,7 +19,7 @@ class Game:
         self._ai = ai
 
         self._human_player = 1  # human goes first by default
-        self._AI_player = 2
+        self._ai_player = 2
 
         self._win = False
 
@@ -32,21 +32,21 @@ class Game:
                 if not self._win:
                     self._ai_move()
 
-        if self._AI_player == 1:
+        if self._ai_player == 1:
             while not self._win:
                 self._ai_move()
                 if not self._win:
                     self._player_move()
-                    
+
         print(f"Player {self.board.winner} wins!")
-              
+
     def _check_win(self, player):
         win = self.board.check_four_connected(player)
         if win:
             self._win = True
 
     def _ai_move(self):
-        player = self._AI_player
+        player = self._ai_player
         move = self._ai.next_move(player)
 
         self.board.make_move(move, player)
@@ -61,7 +61,8 @@ class Game:
 
         choice = False
         while not choice:
-            col = (input("\nInto which column from 0 to 6 do you want to make a move?  "))
+            col = (
+                input("\nInto which column from 0 to 6 do you want to make a move?  "))
             try:
                 number = int(col)
                 if 0 <= number <= 6:
@@ -72,9 +73,9 @@ class Game:
                     print("\nInput is not between 0 and 6.")
             except ValueError:
                 print("\nInput is not a valid integer.")
-        
+
         self._check_win(player)
-        
+
         print("\nYour move: ")
         self.board.show_board()
 
@@ -90,5 +91,5 @@ class Game:
 
             if player_choice == "2":
                 self._human_player = 2
-                self._AI_player = 1
+                self._ai_player = 1
                 choice = True
