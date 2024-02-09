@@ -7,3 +7,5 @@ I also created an initial attempt at a heuristic - the idea here was that I want
 I have not yet had the chance to write tests for the AI and Game classes. I also realized some mistakes in earlier code and tests, specifically the functions calculating if a move would lead to four connected tokens. I started considering how to revise these functions, and this will be my first task next week. This issue has led to some errors in the game play - the game does not finish when a win is achieved - but otherwise the game can be played. I decided to stick with playing it in the terminal. Starting the game asks the player if they would like to start or not, and then the AI and human take turns making moves. On each turn of the human, the program asks for further input on which move to make via terminal.
 
 My main focus next week is improving the connect four functions, then testing for the minimax algorithm and other new classes. Next, I will add further optimizations, like alpha beta pruning.
+
+Time spent: 8 hours
