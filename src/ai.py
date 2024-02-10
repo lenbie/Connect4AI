@@ -9,7 +9,7 @@ class AI:
             board (Board): The game board
         """
         self.board = board
-        self._current_player = 2 #AI plays second by default
+        self._current_player = 2  # AI plays second by default
 
     def next_move(self, player):
         """Finds the next move to make, aiming to find the best possible one.
@@ -22,7 +22,7 @@ class AI:
         """
         max_score = alpha = -999999
         min_score = beta = 999999
-        
+
         best_move = 0
         depth = 4
 
@@ -63,7 +63,7 @@ class AI:
         else:
             current_player = 2
 
-        if self.board.check_four_connected(current_player): #win
+        if self.board.check_four_connected(current_player):  # win
             if current_player == 1:
                 return 1000000 + depth
             return -1000000 - depth
@@ -72,7 +72,7 @@ class AI:
             return 0
 
         if depth == 0:
-            score = self.evaluate_board(current_player) 
+            score = self.evaluate_board(current_player)
             if current_player == 1:
                 return score
             return -score
@@ -138,9 +138,10 @@ class AI:
         if window.count(player) == 2 and window.count(0) == 2:
             score += 10
 
-        if window.count(other) == 3 and window.count(0) == 1: #other player can win on the next turn
+        # other player can win on the next turn
+        if window.count(other) == 3 and window.count(0) == 1:
             score -= 500
-        
+
         return score
 
     def evaluate_board(self, player):
@@ -157,28 +158,32 @@ class AI:
         # Check horizontal
         for row in range(6):
             for col in range(4):
-                window = [self.board.board[row][col], self.board.board[row][col + 1], self.board.board[row][col + 2], self.board.board[row][col + 3]]
+                window = [self.board.board[row][col], self.board.board[row][col + 1],
+                          self.board.board[row][col + 2], self.board.board[row][col + 3]]
                 score += self._evaluate_window(window, player)
 
         # Check vertical
         for row in range(3):
             for col in range(7):
-                window = [self.board.board[row][col], self.board.board[row + 1][col], self.board.board[row + 2][col], self.board.board[row + 3][col]]
+                window = [self.board.board[row][col], self.board.board[row + 1][col],
+                          self.board.board[row + 2][col], self.board.board[row + 3][col]]
                 score += self._evaluate_window(window, player)
 
         # Check right downward diagonals
         for row in range(3):
             for col in range(4):
-                window = [self.board.board[row][col], self.board.board[row + 1][col + 1], self.board.board[row + 2][col + 2], self.board.board[row + 3][col + 3]]
+                window = [self.board.board[row][col], self.board.board[row + 1][col + 1],
+                          self.board.board[row + 2][col + 2], self.board.board[row + 3][col + 3]]
                 score += self._evaluate_window(window, player)
 
         # Check left upward diagonals
         for row in range(3):
             for col in range(3, 7):
-                window = [self.board.board[row][col], self.board.board[row + 1][col - 1], self.board.board[row + 2][col - 2], self.board.board[row + 3][col - 3]]
+                window = [self.board.board[row][col], self.board.board[row + 1][col - 1],
+                          self.board.board[row + 2][col - 2], self.board.board[row + 3][col - 3]]
                 score += self._evaluate_window(window, player)
 
-        #Increase score for center column pieces 
+        # Increase score for center column pieces
         for col in range(2, 5):
             for row in range(5):
                 if self.board.board[row][col] == player:
@@ -189,10 +194,3 @@ class AI:
 
         return score
     
-if __name__ == "__main__":
-    test_board = Board()
-    ai = AI(test_board)
-
-    
-    move = ai.next_move(1)
-    print(move)

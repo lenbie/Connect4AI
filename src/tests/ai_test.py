@@ -5,6 +5,7 @@ from board import Board
 
 test_board = Board()
 
+
 class TestAI(unittest.TestCase):
     def setUp(self):
         self.ai = AI(test_board)
@@ -28,14 +29,14 @@ class TestAI(unittest.TestCase):
         test_board.make_move(5, 1)
         test_board.make_move(3, 2)
         test_board.make_move(0, 1)
-        
+
         player = 2
         expected_move = 4
 
         move = self.ai.next_move(player)
 
         self.assertEqual(move, expected_move)
-    
+
     def test_win_next_move_player1(self):
         test_board.make_move(3, 1)
         test_board.make_move(5, 2)

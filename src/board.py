@@ -50,7 +50,8 @@ class Board:
             current_player (int): player number 1 or 2 representing the current player
         """
 
-        if not self.win: #self.win redundant as of now, since never updated. Remove, if this doesn't change.
+        # self.win redundant as of now, since never updated. Remove, if this doesn't change.
+        if not self.win:
             if self.check_valid_move(column_index):
                 free_row = self._check_highest_square(column_index)
                 self.board[free_row][column_index] = current_player
@@ -187,7 +188,7 @@ class Board:
                     if self._check_right_up_diagonals(row, col):
                         winner = self.board[row][col]
                         return winner
-                    
+
     def _check_right_down_diagonals(self, row, col):
         """Checks if there are four connected in a right downward diagonal
         starting from the row and column index given.
