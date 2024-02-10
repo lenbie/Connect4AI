@@ -46,6 +46,7 @@ class Game:
 
         again = input("\nDo you want to play again? Please type YES or NO: ")
         if again.lower() == "yes":
+            self._win = False
             self.play_game()
 
     def _check_win(self, player):
