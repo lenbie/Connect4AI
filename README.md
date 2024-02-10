@@ -14,12 +14,18 @@
 
 [Week 3 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week3Report.md)
 
+[Week 4 Report]()
+
 ## Running the project
 
 Note that Python version 3.10.12 was used for creating and testing this project.
 
+## How to Play
 
-## Installation
+The game is currently played via command line. Follow the steps below to install the project and start the game.
+Then, enter inputs as prompted in the terminal. Columns are indexed from 0 (very left) to 6 (very right). Happy playing!
+
+# Installation
 
 1. Install dependencies through command line using:
 
@@ -27,6 +33,11 @@ Note that Python version 3.10.12 was used for creating and testing this project.
 poetry install
 ```
 
+2. Start the game using: 
+
+```bash
+poetry run invoke start
+```
 
 ## Command Line Functions
 

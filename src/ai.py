@@ -9,7 +9,7 @@ class AI:
     def next_move(self, player):
         max_score = -999999
         best_move = 0
-        depth = 2
+        depth = 3
 
         for move in self.get_possible_moves():
             self._current_player = player
@@ -24,7 +24,6 @@ class AI:
                 max_score = score
                 best_move = move
             self.board.undo_move(move)
-
         return best_move
 
     def minimax(self, depth, player_one):  # TRUE if player 1, FAlSE if player 2
@@ -33,18 +32,17 @@ class AI:
         else:
             current_player = 2
 
-        # for move in self.get_possible_moves():
-        #   if self.board.check_valid_move(move) and
-        if self.board.check_four_connected(current_player):
+        if self.board.check_four_connected(current_player): #win
             if current_player == 1:
-                return 1000 + depth
-            return -1000 - depth
+                return 100000 + depth
+            return -100000 - depth
 
         if self.board.move_count + (5 - depth) == 42:  # draw
             return 0
 
         if depth == 0:
-            return self.heuristic_evaluation()
+            return self.evaluate_board()
+            #return self.heuristic_evaluation()
 
         if player_one:
             value = -999999
@@ -73,14 +71,67 @@ class AI:
 
         return moves
 
+    def _evaluate_window(self, window):
+        player = self._current_player
+        if player == 1:
+            other = 2
+        else:
+            other = 1
+
+        score = 0
+        if window.count(player) == 4:
+            score += 100
+        elif window.count(player) == 3 and window.count(0) == 1:
+            score += 5
+        elif window.count(player) == 2 and window.count(0) == 2:
+            score += 2
+
+        if window.count(other) == 3 and window.count(0) == 1:
+            score -= 4
+
+        return score
+
+    def evaluate_board(self):
+
+        score = 0
+
+        # Check horizontal
+        for row in range(6):
+            for col in range(4):
+                window = [self.board.board[row][col], self.board.board[row][col + 1], self.board.board[row][col + 2], self.board.board[row][col + 3]]
+                score += self._evaluate_window(window)
+
+        # Check vertical
+        for row in range(3):
+            for col in range(7):
+                window = [self.board.board[row][col], self.board.board[row + 1][col], self.board.board[row + 2][col], self.board.board[row + 3][col]]
+                score += self._evaluate_window(window)
+
+        # Check right downward diagonals
+        for row in range(3):
+            for col in range(4):
+                window = [self.board.board[row][col], self.board.board[row + 1][col + 1], self.board.board[row + 2][col + 2], self.board.board[row + 3][col + 3]]
+                score += self._evaluate_window(window)
+
+        # Check left upward diagonals
+        for row in range(3):
+            for col in range(3, 7):
+                window = [self.board.board[row][col], self.board.board[row + 1][col - 1], self.board.board[row + 2][col - 2], self.board.board[row + 3][col - 3]]
+                score += self._evaluate_window(window)
+
+        return score
+
     def heuristic_evaluation(self):
         graph_current = self._create_graph_from_array(
             self.board.board, self._current_player)
+        
         if self._current_player == 1:
             other = 2
-        other = 1
-        graph_other = self._create_graph_from_array(self.board.board, other)
+        else:
+            other = 1
 
+        graph_other = self._create_graph_from_array(self.board.board, other)
+        
         nodes_current = 0
         degree_count_current = 0
         for value in graph_current.items():
@@ -89,7 +140,8 @@ class AI:
 
         if nodes_current > 0:
             average_node_degree_current = degree_count_current / nodes_current
-        average_node_degree_current = 0
+        else:
+            average_node_degree_current = 0
 
         nodes_other = 0
         degree_count_other = 0
@@ -99,7 +151,8 @@ class AI:
 
         if nodes_other > 0:
             average_node_degree_other = degree_count_other / nodes_other
-        average_node_degree_other = 0
+        else:
+            average_node_degree_other = 0
 
         return average_node_degree_current - average_node_degree_other
 

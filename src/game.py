@@ -24,6 +24,10 @@ class Game:
         self._win = False
 
     def play_game(self):
+        """Main game loop, managing the AI and human player
+            making moves until one of them wins.
+        """
+        self.board.clear_board()
         self._select_start_player()
 
         if self._human_player == 1:
@@ -40,12 +44,24 @@ class Game:
 
         print(f"Player {self.board.winner} wins!")
 
+        again = input("\nDo you want to play again? Please type YES or NO: ")
+        if again.lower() == "yes":
+            self.play_game()
+
     def _check_win(self, player):
+        """Checks if someone has won the game yet.
+
+        Args:
+            player: The current player (human or AI player)
+        """
         win = self.board.check_four_connected(player)
         if win:
             self._win = True
 
     def _ai_move(self):
+        """Manages the AI making moves.
+        Prints the board once a move has been made.
+        """
         player = self._ai_player
         move = self._ai.next_move(player)
 
@@ -56,6 +72,9 @@ class Game:
         self.board.show_board()
 
     def _player_move(self):
+        """Manages the human player making moves via asking for input.
+        Prints the board once a move has been made.
+        """
 
         player = self._human_player
 
@@ -79,9 +98,12 @@ class Game:
         print("\nYour move: ")
         self.board.show_board()
 
-    # UI function #player 1 starts, human selects if they are player 1 or 2s
     def _select_start_player(self):
-        print("Do you want to play as Player 1 or Player 2?")
+        """Manages the choice for starting player via terminal input.
+        The human player can select Player 1 (starting player) or player 2.
+        The AI will be the player the human does not select.
+        """
+        print("\nDo you want to play as Player 1 or Player 2?")
         choice = False
         while not choice:
             player_choice = str(

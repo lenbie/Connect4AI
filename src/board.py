@@ -16,7 +16,7 @@ class Board:
         """
         self.board = [[0 for i in range(WIDTH)] for j in range(
             HEIGHT)]  # 0 represents empty cell
-        self.win = False  # if anyone has won, but idk if needed
+        self.win = False  # if anyone has won, but not currently in use
         self.move_count = 0
         self.winner = None
 
@@ -50,7 +50,7 @@ class Board:
             current_player (int): player number 1 or 2 representing the current player
         """
 
-        if not self.win:
+        if not self.win: #self.win redundant as of now, since never updated. Remove, if this doesn't change.
             if self.check_valid_move(column_index):
                 free_row = self._check_highest_square(column_index)
                 self.board[free_row][column_index] = current_player
@@ -86,9 +86,8 @@ class Board:
             if self.board[row][column_index] == 0:
                 return row
 
-    # idk if current player check necessary
     def check_four_connected(self, current_player):
-        """Checks if the specified move will lead the current player to win.
+        """Checks if the current player has won.
             Calls functions to check if there will be four in a row, a column or a diagonal.
 
         Args:
@@ -96,8 +95,8 @@ class Board:
             current_player (int): player number 1 or 2 representing the current player
 
         Returns:
-            True, if the current player will win on the specified move
-            False, if no win can be achieved on this move.
+            True, if the current player has won.
+            False, if no win has been achieved.
         """
         if current_player == self._check_all_rows() or current_player == self._check_all_cols() or current_player == self._check_diag_whole_board():
             self.winner = current_player
@@ -105,6 +104,12 @@ class Board:
         return False
 
     def _check_all_cols(self):
+        """Checks if there are four connected of any player
+        in any column of the board.
+
+        Returns:
+            winner (int or None): If there is a win, the number of the winning player
+        """
         for row in range(3):
             for col in range(7):
                 if self.board[row][col] != 0:
@@ -113,6 +118,17 @@ class Board:
                         return winner
 
     def _check_col(self, row, col):
+        """Checks if there are four connected in a column
+        starting from the row and column index given.
+
+        Args:
+            row (int): Starting row index
+            col (int): Starting column index
+
+        Returns:
+            True, if there are four connected
+            False, if not.
+        """
         piece = self.board[row][col]
         for i in range(1, 4):
             if self.board[row+i][col] != piece:
@@ -120,6 +136,12 @@ class Board:
         return True
 
     def _check_all_rows(self):
+        """Checks if there are four connected of any player
+        in any row of the board.
+
+        Returns:
+            winner (int or None): If there is a win, the number of the winning player
+        """
         for col in range(4):
             for row in range(6):
                 if self.board[row][col] != 0:
@@ -128,36 +150,74 @@ class Board:
                         return winner
 
     def _check_row(self, row, col):
+        """Checks if there are four connected in a row
+        starting from the row and column index given.
+
+        Args:
+            row (int): Starting row index
+            col (int): Starting column index
+
+        Returns:
+            True, if there are four connected.
+            False, if not.
+        """
         piece = self.board[row][col]
         for i in range(1, 4):
             if self.board[row][col+i] != piece:
                 return False
         return True
 
-    def _check_diag_whole_board(self):  # make sure only 1 winner possible
+    def _check_diag_whole_board(self):
+        """Checks if there are four connected of any player
+        in any diagonal of the board.
+
+        Returns:
+            winner (int or None): If there is a win, the number of the winning player
+        """
         for row in range(0, 3):
             for col in range(0, 4):
-                # see if we need this, or getting player as input
                 if self.board[row][col] != 0:
-                    if self._check_right_diagonals(row, col):
+                    if self._check_right_down_diagonals(row, col):
                         winner = self.board[row][col]
-                        return winner  # return True or winner? currently returns None if no winner
+                        return winner
 
         for row in range(5, 2, -1):
             for col in range(0, 4):
                 if self.board[row][col] != 0:
-                    if self._check_left_diagonals(row, col):
+                    if self._check_right_up_diagonals(row, col):
                         winner = self.board[row][col]
-                        return winner  # return True or winner?
+                        return winner
+                    
+    def _check_right_down_diagonals(self, row, col):
+        """Checks if there are four connected in a right downward diagonal
+        starting from the row and column index given.
 
-    def _check_right_diagonals(self, row, col):
+        Args:
+            row (int): Starting row index
+            col (int): Starting column index
+
+        Returns:
+            True, if there are four connected.
+            False, if not.
+        """
         piece = self.board[row][col]
         for i in range(1, 4):
             if self.board[row+i][col+i] != piece:
                 return False
         return True
 
-    def _check_left_diagonals(self, row, col):
+    def _check_right_up_diagonals(self, row, col):
+        """Checks if there are four connected in a right upward diagonal
+        starting from the row and column index given.
+
+        Args:
+            row (int): Starting row index
+            col (int): Starting column index
+
+        Returns:
+            True, if there are four connected.
+            False, if not.
+        """
         piece = self.board[row][col]
         for i in range(1, 4):
             if self.board[row-i][col+i] != piece:
@@ -182,15 +242,3 @@ class Board:
             The content of the specified square (int)
         """
         return self.board[row_index][column_index]
-
-
-if __name__ == "__main__":
-    testboard = Board()
-    testboard.make_move(2, 1)
-    testboard.make_move(3, 1)
-    testboard.make_move(4, 2)
-    testboard.make_move(5, 2)
-    win = testboard._check_row(5, 2)
-    testboard.show_board()
-    print(win)
-    # print(board.check_four_connected(1))

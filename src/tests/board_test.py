@@ -90,7 +90,7 @@ class TestBoard(unittest.TestCase):
         win = self.testboard._check_col(2, 2)
         self.assertEqual(win, False)
 
-    def test_check_left_diagonal(self):
+    def test_check_right_up_diagonal(self):
         self.testboard.clear_board()
 
         self.testboard.make_move(1, 1)
@@ -107,7 +107,7 @@ class TestBoard(unittest.TestCase):
         win = self.testboard._check_diag_whole_board()
         self.assertEqual(win, 1)
 
-    def test_check_left_upper_diagonal(self):
+    def test_check_right_down_diagonal(self):
         self.testboard.clear_board()
 
         self.testboard.make_move(1, 1)
@@ -121,5 +121,5 @@ class TestBoard(unittest.TestCase):
         self.testboard.make_move(1, 1)
         self.testboard.make_move(4, 1)
 
-        win = self.testboard._check_right_diagonals(2, 1)
+        win = self.testboard._check_right_down_diagonals(2, 1)
         self.assertEqual(win, True)
