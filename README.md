@@ -14,7 +14,7 @@
 
 [Week 3 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week3Report.md)
 
-[Week 4 Report]()
+[Week 4 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week4Report.md)
 
 ## Running the project
 
