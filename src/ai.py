@@ -20,6 +20,8 @@ class AI:
         Returns:
             best_move (int): The column into which the AI makes its next move.
         """
+        self._current_player = player
+
         max_score = alpha = -999999
         min_score = beta = 999999
 
@@ -27,13 +29,14 @@ class AI:
         depth = 4
 
         for move in self.get_possible_moves():
-            self._current_player = player
 
             self.board.make_move(move, self._current_player)
 
             player_one = bool(self._current_player == 1)
 
             score = self.minimax(depth, player_one, alpha, beta)
+
+            print(score)
 
             if player_one:
                 if score > max_score:
@@ -72,8 +75,8 @@ class AI:
             return 0
 
         if depth == 0:
-            score = self.evaluate_board(current_player)
-            if current_player == 1:
+            score = self.evaluate_board(self._current_player)
+            if self._current_player == 1:
                 return score
             return -score
 
