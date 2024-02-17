@@ -37,18 +37,14 @@ class AI:
 
             player_one = bool(self._current_player == 1)
 
-            score = self.minimax(depth, player_one, alpha, beta) 
+            minimax = self.minimax(depth, player_one, alpha, beta, move)
+            score = minimax[0]
 
             print(score)
-
-            if player_one:
-                if score > max_score:
-                    max_score = score
-                    best_move = move
-            else:
-                if score < min_score:
-                    min_score = score
-                    best_move = move
+            if score >= max_score:
+                max_score = score # this causes two tests to fail
+                best_move = minimax[1]
+                alpha = score
 
             self.board.undo_move(move)
 
@@ -56,14 +52,16 @@ class AI:
 
 
 
-    def minimax(self, depth: int, player_one: bool, alpha, beta):
+    def minimax(self, depth: int, player_one: bool, alpha, beta, prev_move):
         """Recursive minimax algorithm function, with alpha beta pruning.
 
         Args:
             depth (int): The depth to which the minimax algorithm searches game states
             player_one (bool): True if the AI is player 1, False if player 2
             alpha, beta (float): Alpha -beta pruning values
+            prev_move (int): The previous move made
 
+            
         Returns:
             _type_: _description_
         """
@@ -74,37 +72,52 @@ class AI:
 
         if self.board.check_four_connected(current_player):  # win
             if player_one:
-                return 1000000 + depth
-            return -1000000 - depth
+                return 1000000 + depth, prev_move
+            return -1000000 - depth, prev_move
 
         if len(self.get_possible_moves()) == 0:  # draw
-            return 0
+            return 0, prev_move
 
         if depth == 0:
-            return self.evaluate_board()
-
+            score = self.evaluate_board()
+            return score, prev_move
+        
         if player_one:
-            value = VERY_SMALL_NUMBER
+            max_value = VERY_SMALL_NUMBER
             for move in self.get_possible_moves():
                 self.board.make_move(move, current_player)
-                value = max(value, self.minimax(depth-1, False, alpha, beta))
+
+                value, _ = self.minimax(depth-1, False, alpha, beta, move)
+
                 self.board.undo_move(move)
-                if value > beta:
+                
+                if value > max_value:
+                    max_value = value
+                    best_move = move
+
+                if value >= beta:
                     break
                 alpha = max(alpha, value)
 
-            return value
+            return max_value, best_move
 
-        value = VERY_LARGE_NUMBER
+        min_value = VERY_LARGE_NUMBER
         for move in self.get_possible_moves():
             self.board.make_move(move, current_player)
-            value = min(value, self.minimax(depth-1, True, alpha, beta))
+
+            value, _ = self.minimax(depth-1, True, alpha, beta, move)
+
             self.board.undo_move(move)
-            if value < alpha:
+
+            if value < min_value:
+                min_value = value
+                best_move = move
+
+            if value <= alpha:
                 break
             beta = min(beta, value)
 
-        return value
+        return min_value, best_move
 
     def get_possible_moves(self):
         """Finds all columns into which valid moves can be made at
