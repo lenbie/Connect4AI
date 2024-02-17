@@ -25,11 +25,11 @@ class AI:
         """
         self._current_player = player
 
-        max_score = alpha = VERY_SMALL_NUMBER
-        min_score = beta = VERY_LARGE_NUMBER
+        max_score = VERY_SMALL_NUMBER
+        min_score = VERY_LARGE_NUMBER
 
         best_move = 0
-        depth = 4
+        depth = 2
 
         for move in self.get_possible_moves():
 
@@ -37,9 +37,8 @@ class AI:
 
             player_one = bool(self._current_player == 1)
 
-            score = self.minimax(depth, player_one, alpha, beta) 
-
-            print(score)
+            score = self.minimax(depth, player_one)
+            print(f"Move {move} gets score {score}")
 
             if player_one:
                 if score > max_score:
@@ -55,8 +54,7 @@ class AI:
         return best_move
 
 
-
-    def minimax(self, depth: int, player_one: bool, alpha, beta):
+    def minimax(self, depth: int, player_one: bool):
         """Recursive minimax algorithm function, with alpha beta pruning.
 
         Args:
@@ -68,45 +66,47 @@ class AI:
         """
         if player_one:
             current_player = 1
+            
         else:
             current_player = 2
 
-        if self.board.check_four_connected(current_player):  # win
+        if self.board.check_four_connected(current_player): #win
+            print(f"{current_player} WIN")
+            print("winning state")
+            self.board.show_board()
             if player_one:
-                return 1000000 + depth
-            return -1000000 - depth
+                return 10000 + depth
+            return -10000 - depth
 
-        if self.board.move_count + (5 - depth) == 42:  # draw
+        if len(self.get_possible_moves()) == 0:  # draw
             return 0
 
         if depth == 0:
-            score = self.evaluate_board(current_player)
-            if player_one:
-                return score
-            return -score
-
+            #print(f"depth 0")
+            #self.board.show_board()
+            score = self.evaluate_board()
+            #print(f"Player {current_player}")
+            #print(f"Score: {score}")
+            return score
+        
         if player_one:
             value = VERY_SMALL_NUMBER
-            for move in self.get_possible_moves():
+            moves = self.get_possible_moves()
+
+            for move in moves:
                 self.board.make_move(move, current_player)
-                #value = max(value, self.minimax(depth-1, False))
-                value = max(value, self.minimax(depth-1, False, alpha, beta))
+                value = max(value, self.minimax(depth-1, False))
                 self.board.undo_move(move)
-                if value > beta:
-                    break
-                alpha = max(alpha, value)
 
             return value
 
         value = VERY_LARGE_NUMBER
-        for move in self.get_possible_moves():
+        moves = self.get_possible_moves()
+
+        for move in moves:
             self.board.make_move(move, current_player)
-            #value = min(value, self.minimax(depth-1, True))
-            value = min(value, self.minimax(depth-1, True, alpha, beta))
+            value = min(value, self.minimax(depth-1, True))
             self.board.undo_move(move)
-            if value < alpha:
-                break
-            beta = min(beta, value)
 
         return value
 
@@ -126,7 +126,7 @@ class AI:
 
         return moves
 
-    def _evaluate_window(self, window, player):
+    def _evaluate_window(self, window):
         """Part of the heuristic evaluation of the board state for the current player.
         Assigns points depending on how many pieces the player (and opponent) has
         in the vicinity of four squares.
@@ -138,28 +138,27 @@ class AI:
         Returns:
             score (int): The points assigned to the current player for that window.
         """
-        other = 2
-        if player == 2:
-            other = 1
 
         score = 0
-        if window.count(player) == 3 and window.count(0) == 1:
+        if window.count(1) == 4:
+            score += 10000
+        if window.count(1) == 3 and window.count(0) == 1:
             score += 100
-        if window.count(player) == 2 and window.count(0) == 2:
+        if window.count(1) == 2 and window.count(0) == 2:
             score += 10
 
-        # other player can win on the next turn
-        if window.count(other) == 3 and window.count(0) == 1:
-            score -= 500
+        if window.count(2) == 4:
+            score -= 10000
+        if window.count(2) == 3 and window.count(0) == 1:
+            score -= 100
+        if window.count(2) == 2 and window.count(0) == 2:
+            score -= 10
 
         return score
 
-    def evaluate_board(self, player):
+    def evaluate_board(self):
         """Main heuristic evaluation function. Splits the game board into window sections 
         to be evaluated by the _evaluate_window function.
-
-        Args:
-            player (int): current player
 
         Returns:
             score (int): The overall heuristic score of the position for the current player.
@@ -170,37 +169,36 @@ class AI:
             for col in range(4):
                 window = [self.board.board[row][col], self.board.board[row][col + 1],
                           self.board.board[row][col + 2], self.board.board[row][col + 3]]
-                score += self._evaluate_window(window, player)
+                score += self._evaluate_window(window)
 
         # Check vertical
         for row in range(3):
             for col in range(7):
                 window = [self.board.board[row][col], self.board.board[row + 1][col],
                           self.board.board[row + 2][col], self.board.board[row + 3][col]]
-                score += self._evaluate_window(window, player)
+                score += self._evaluate_window(window)
 
         # Check right downward diagonals
         for row in range(3):
             for col in range(4):
                 window = [self.board.board[row][col], self.board.board[row + 1][col + 1],
                           self.board.board[row + 2][col + 2], self.board.board[row + 3][col + 3]]
-                score += self._evaluate_window(window, player)
+                score += self._evaluate_window(window)
 
         # Check left upward diagonals
         for row in range(3):
             for col in range(3, 7):
                 window = [self.board.board[row][col], self.board.board[row + 1][col - 1],
                           self.board.board[row + 2][col - 2], self.board.board[row + 3][col - 3]]
-                score += self._evaluate_window(window, player)
-
-        # Increase score for center column pieces
-        for col in range(2, 5):
-            for row in range(5):
-                if self.board.board[row][col] == player:
-                    if col == 3:
-                        score += 5
-                    else:
-                        score += 2
+                score += self._evaluate_window(window)
 
         return score
     
+
+"""faulty board:
+    [0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0]
+    [0, 1, 1, 0, 0, 0, 0]
+    [0, 2, 1, 0, 0, 0, 0]
+    [2, 2, 2, 1, 1, 0, 0]
+    [1, 1, 2, 2, 2, 1, 0]"""

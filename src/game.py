@@ -1,5 +1,5 @@
 from board import Board
-from ai import AI
+from ai_trial import AI
 
 
 class Game:
@@ -116,3 +116,6 @@ class Game:
                 self._human_player = 2
                 self._ai_player = 1
                 choice = True
+
+if __name__ == "__main__":
+    pass

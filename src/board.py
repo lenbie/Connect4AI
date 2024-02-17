@@ -64,7 +64,6 @@ class Board:
 
         Args:
             column_index (int): integer representing the chosen column
-            current_player (int): player number 1 or 2 representing the current player
         """
         if self.check_valid_move(column_index):
             free_row = self._check_highest_square(column_index)
