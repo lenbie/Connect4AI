@@ -1,5 +1,5 @@
 from board import Board
-from ai_trial import AI
+from ai import AI
 
 
 class Game:
@@ -110,6 +110,8 @@ class Game:
             player_choice = str(
                 input("\nPlease enter 1 for Player 1, or 2 for player 2: "))
             if player_choice == "1":
+                self._human_player = 1
+                self._ai_player = 2
                 choice = True
 
             if player_choice == "2":

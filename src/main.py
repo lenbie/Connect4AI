@@ -1,6 +1,6 @@
 from board import Board
 from game import Game
-from ai_trial import AI
+from ai import AI
 
 
 def main():

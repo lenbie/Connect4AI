@@ -12,7 +12,7 @@ class AI:
             board (Board): The game board
         """
         self.board = board
-        self._current_player = 2  # AI plays second by default
+        self.ai_player = 2  # AI plays second by default
 
     def next_move(self, player):
         """Finds the next move to make, aiming to find the best possible one.
@@ -23,7 +23,7 @@ class AI:
         Returns:
             best_move (int): The column into which the AI makes its next move.
         """
-        self._current_player = player
+        self.ai_player = player
 
         max_score = VERY_SMALL_NUMBER
         min_score = VERY_LARGE_NUMBER
@@ -33,28 +33,23 @@ class AI:
 
         for move in self.get_possible_moves():
 
-            self.board.make_move(move, self._current_player)
+            self.board.make_move(move, self.ai_player)
 
-            player_one = bool(self._current_player == 1)
+            turn = self.ai_player
 
-            score = self.minimax(depth, player_one)
+            score = self.minimax(depth, self.ai_player, turn)
             print(f"Move {move} gets score {score}")
 
-            if player_one:
-                if score > max_score:
-                    max_score = score
-                    best_move = move
-            else:
-                if score < min_score:
-                    min_score = score
-                    best_move = move
+            if score > max_score:
+                max_score = score
+                best_move = move
 
             self.board.undo_move(move)
 
         return best_move
 
 
-    def minimax(self, depth: int, player_one: bool):
+    def minimax(self, depth: int, ai_player, turn): #ai_player = the maximising player, unchanging #turn = the player whose turn it is in the minimax, changing
         """Recursive minimax algorithm function, with alpha beta pruning.
 
         Args:
@@ -64,39 +59,34 @@ class AI:
         Returns:
             _type_: _description_
         """
-        if player_one:
-            current_player = 1
-            
-        else:
-            current_player = 2
+        #print(turn)
 
-        if self.board.check_four_connected(current_player): #win
-            print(f"{current_player} WIN")
+        if self.board.check_four_connected(2 if turn == 1 else 1): #win
             print("winning state")
-            self.board.show_board()
-            if player_one:
-                return 10000 + depth
-            return -10000 - depth
+            print(turn)
+            print(ai_player)
+            if ai_player == turn:
+                return - 10000 - depth
+            return 10000 + depth
 
         if len(self.get_possible_moves()) == 0:  # draw
             return 0
 
         if depth == 0:
-            #print(f"depth 0")
-            #self.board.show_board()
             score = self.evaluate_board()
-            #print(f"Player {current_player}")
-            #print(f"Score: {score}")
             return score
         
-        if player_one:
+        if ai_player == turn:
             value = VERY_SMALL_NUMBER
             moves = self.get_possible_moves()
 
             for move in moves:
-                self.board.make_move(move, current_player)
-                value = max(value, self.minimax(depth-1, False))
+                self.board.make_move(move, turn)
+
+                value = max(value, self.minimax(depth-1, ai_player, 1 if turn == 2 else 2))
+                print(f"Eval: {value}")
                 self.board.undo_move(move)
+
 
             return value
 
@@ -104,8 +94,9 @@ class AI:
         moves = self.get_possible_moves()
 
         for move in moves:
-            self.board.make_move(move, current_player)
-            value = min(value, self.minimax(depth-1, True))
+            self.board.make_move(move, turn)
+
+            value = min(value, self.minimax(depth-1, ai_player, 1 if turn == 2 else 2))
             self.board.undo_move(move)
 
         return value

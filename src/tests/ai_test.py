@@ -22,6 +22,7 @@ class TestAI(unittest.TestCase):
         self.assertEqual(move, expected_move)
 
     def test_win_next_move_player2(self):
+        test_board.clear_board()
         test_board.make_move(0, 1)
         test_board.make_move(1, 2)
         test_board.make_move(5, 1)
@@ -38,6 +39,7 @@ class TestAI(unittest.TestCase):
         self.assertEqual(move, expected_move)
 
     def test_win_next_move_player1(self):
+        test_board.clear_board()
         test_board.make_move(3, 1)
         test_board.make_move(5, 2)
         test_board.make_move(1, 1)
@@ -51,3 +53,35 @@ class TestAI(unittest.TestCase):
         move = self.ai.next_move(player)
 
         self.assertEqual(move, expected_move)
+
+    def test_move_sorting_all_possible(self):
+        test_board.clear_board()
+        moves = self.ai.get_possible_moves()
+
+        self.assertEqual(moves, [3, 2, 4, 1, 5, 0, 6])
+
+    def test_move_sorting_full_col_3(self):
+        test_board.clear_board()
+        test_board.make_move(3, 1)
+        test_board.make_move(3, 2)
+        test_board.make_move(3, 1)
+        test_board.make_move(3, 2)
+        test_board.make_move(3, 1)
+        test_board.make_move(3, 1)
+
+        moves = self.ai.get_possible_moves()
+
+        self.assertEqual(moves, [2, 4, 1, 5, 0, 6])
+    
+    def test_move_sorting_full_col_5(self):
+        test_board.clear_board()
+        test_board.make_move(5, 1)
+        test_board.make_move(5, 2)
+        test_board.make_move(5, 1)
+        test_board.make_move(5, 2)
+        test_board.make_move(5, 1)
+        test_board.make_move(5, 1)
+
+        moves = self.ai.get_possible_moves()
+
+        self.assertEqual(moves, [3, 2, 4, 1, 0, 6])
