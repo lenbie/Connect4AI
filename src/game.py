@@ -119,5 +119,6 @@ class Game:
                 self._ai_player = 1
                 choice = True
 
+
 if __name__ == "__main__":
     pass

@@ -4,6 +4,7 @@ from board import Board
 VERY_LARGE_NUMBER = math.inf
 VERY_SMALL_NUMBER = -math.inf
 
+
 class AI:
     def __init__(self, board: Board):
         """Class constructor
@@ -42,15 +43,13 @@ class AI:
 
             print(score)
             if score >= max_score:
-                max_score = score # this causes two tests to fail
+                max_score = score  # this causes two tests to fail
                 best_move = minimax[1]
                 alpha = score
 
             self.board.undo_move(move)
 
         return best_move
-
-
 
     def minimax(self, depth: int, player_one: bool, alpha, beta, prev_move):
         """Recursive minimax algorithm function, with alpha beta pruning.
@@ -61,7 +60,7 @@ class AI:
             alpha, beta (float): Alpha -beta pruning values
             prev_move (int): The previous move made
 
-            
+
         Returns:
             _type_: _description_
         """
@@ -81,7 +80,7 @@ class AI:
         if depth == 0:
             score = self.evaluate_board()
             return score, prev_move
-        
+
         if player_one:
             max_value = VERY_SMALL_NUMBER
             for move in self.get_possible_moves():
@@ -90,7 +89,7 @@ class AI:
                 value, _ = self.minimax(depth-1, False, alpha, beta, move)
 
                 self.board.undo_move(move)
-                
+
                 if value > max_value:
                     max_value = value
                     best_move = move
@@ -133,8 +132,9 @@ class AI:
             valid = self.board.check_valid_move(column)
             if valid:
                 moves.append(column)
-        
-        sorted_moves = sorted(moves, key=lambda x: ideal_move_order.index(x) if x in ideal_move_order else len(ideal_move_order))
+
+        sorted_moves = sorted(moves, key=lambda x: ideal_move_order.index(
+            x) if x in ideal_move_order else len(ideal_move_order))
 
         return sorted_moves
 
@@ -205,4 +205,3 @@ class AI:
                 score += self._evaluate_window(window)
 
         return score
-    

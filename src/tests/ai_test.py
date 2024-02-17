@@ -72,7 +72,7 @@ class TestAI(unittest.TestCase):
         moves = self.ai.get_possible_moves()
 
         self.assertEqual(moves, [2, 4, 1, 5, 0, 6])
-    
+
     def test_move_sorting_full_col_5(self):
         test_board.clear_board()
         test_board.make_move(5, 1)
