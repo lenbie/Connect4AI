@@ -27,20 +27,26 @@ class Game:
         """Main game loop, managing the AI and human player
             making moves until one of them wins.
         """
+        moves = 0
+
         self.board.clear_board()
         self._select_start_player()
 
         if self._human_player == 1:
             while not self._win:
                 self._player_move()
+                moves +=1
                 if not self._win:
-                    self._ai_move()
+                    self._ai_move(moves)
+                    moves +=1
 
         if self._ai_player == 1:
             while not self._win:
-                self._ai_move()
+                self._ai_move(moves)
+                moves +=1
                 if not self._win:
                     self._player_move()
+                    moves +=1
 
         print(f"Player {self.board.winner} wins!")
 
@@ -55,16 +61,19 @@ class Game:
         Args:
             player: The current player (human or AI player)
         """
-        win = self.board.check_four_connected(player)
+        win = self.board.check_four_connected()#player)
         if win:
             self._win = True
 
-    def _ai_move(self):
+    def _ai_move(self, moves):
         """Manages the AI making moves.
         Prints the board once a move has been made.
+
+        Args:
+            moves (int): number of moves in the game so far
         """
         player = self._ai_player
-        move = self._ai.next_move(player)
+        move = self._ai.next_move(player, moves)
 
         self.board.make_move(move, player)
         self._check_win(player)
@@ -85,12 +94,11 @@ class Game:
                 input("\nInto which column from 0 to 6 do you want to make a move?  "))
             try:
                 number = int(col)
-                if 0 <= number <= 6:
+                if self.board.check_valid_move(number):
                     move = self.board.make_move(number, player)
-                    if move:
-                        choice = True
+                    choice = True
                 else:
-                    print("\nInput is not between 0 and 6.")
+                    print("\nInput is not a valid move.")
             except ValueError:
                 print("\nInput is not a valid integer.")
 

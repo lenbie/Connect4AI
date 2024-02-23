@@ -24,9 +24,15 @@ class Board:
         """Temporary board representation to print it to command line for manual tests,
             before UI has been implemented.
         """
+        #for row in range(HEIGHT):
+        #    for col in range(WIDTH):
+        #        if self.board[row][col] == 1:
+        #            self.board[row][col] = "🟡"
+        #        if self.board[row][col] == 2:
+        #            self.board[row][col] = "🔴"
+        
         for row in self.board:
-            print(row)
-        print("")
+            print(f"{row}\n")
 
     def check_valid_move(self, column_index):
         """Checks if a token can be dropped into the chosen column
@@ -86,7 +92,7 @@ class Board:
             if self.board[row][column_index] == 0:
                 return row
 
-    def check_four_connected(self, current_player):
+    def check_four_connected(self):#, current_player):
         """Checks if the current player has won.
             Calls functions to check if there will be four in a row, a column or a diagonal.
 
@@ -98,8 +104,9 @@ class Board:
             True, if the current player has won.
             False, if no win has been achieved.
         """
-        if current_player == self._check_all_rows() or current_player == self._check_all_cols() or current_player == self._check_diag_whole_board():
-            self.winner = current_player
+        #if current_player == self._check_all_rows() or current_player == self._check_all_cols() or current_player == self._check_diag_whole_board():
+            #self.winner = current_player
+        if self._check_all_rows() or self._check_all_cols() or self._check_diag_whole_board():
             return True
         return False
 
@@ -114,8 +121,9 @@ class Board:
             for col in range(7):
                 if self.board[row][col] != 0:
                     if self._check_col(row, col):
-                        winner = self.board[row][col]
-                        return winner
+                        return True
+                        #winner = self.board[row][col]
+                        #return winner
 
     def _check_col(self, row, col):
         """Checks if there are four connected in a column
@@ -146,8 +154,9 @@ class Board:
             for row in range(6):
                 if self.board[row][col] != 0:
                     if self._check_row(row, col):
-                        winner = self.board[row][col]
-                        return winner
+                        #winner = self.board[row][col]
+                        #return winner
+                        return True
 
     def _check_row(self, row, col):
         """Checks if there are four connected in a row
@@ -178,15 +187,17 @@ class Board:
             for col in range(0, 4):
                 if self.board[row][col] != 0:
                     if self._check_right_down_diagonals(row, col):
-                        winner = self.board[row][col]
-                        return winner
+                        #winner = self.board[row][col]
+                        #return winner
+                        return True
 
         for row in range(5, 2, -1):
             for col in range(0, 4):
                 if self.board[row][col] != 0:
                     if self._check_right_up_diagonals(row, col):
-                        winner = self.board[row][col]
-                        return winner
+                        #winner = self.board[row][col]
+                        #return winner
+                        return True
 
     def _check_right_down_diagonals(self, row, col):
         """Checks if there are four connected in a right downward diagonal
