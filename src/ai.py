@@ -40,12 +40,12 @@ class AI:
 
             player_one = bool(self._current_player == 1)
 
-            minimax = self.minimax(depth, player_one, alpha, beta, move, move_count)
+            minimax = self.minimax(depth, not player_one, alpha, beta, move, move_count)
             score = minimax[0]
 
             print(score)
             if score >= max_score:
-                max_score = score  # this causes two tests to fail
+                max_score = score
                 best_move = minimax[1]
                 alpha = score
 

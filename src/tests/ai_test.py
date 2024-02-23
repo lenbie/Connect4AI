@@ -16,8 +16,8 @@ class TestAI(unittest.TestCase):
 
         player = 1
         expected_move = 3
-
-        move = self.ai.next_move(player)
+        move_count = 0
+        move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
 
@@ -32,9 +32,10 @@ class TestAI(unittest.TestCase):
         test_board.make_move(0, 1)
 
         player = 2
+        move_count = 7
         expected_move = 4
 
-        move = self.ai.next_move(player)
+        move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
 
@@ -48,9 +49,10 @@ class TestAI(unittest.TestCase):
         test_board.make_move(4, 2)
 
         player = 1
+        move_count = 7
         expected_move = 0
 
-        move = self.ai.next_move(player)
+        move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
 
