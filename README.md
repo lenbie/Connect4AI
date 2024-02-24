@@ -18,6 +18,8 @@
 
 [Week 5 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week5Report.md)
 
+[Week 6 Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/Week6Report.md)
+
 ## Running the project
 
 Note that Python version 3.10.12 was used for creating and testing this project.
