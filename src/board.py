@@ -16,23 +16,29 @@ class Board:
         """
         self.board = [[0 for i in range(WIDTH)] for j in range(
             HEIGHT)]  # 0 represents empty cell
-        self.win = False  # if anyone has won, but not currently in use
-        self.move_count = 0
-        self.winner = None #not currently in use
+        
+        # The three below are not currently in use, will likely get rid of them
+        self.win = False
+        self.move_count = 0 
+        self.winner = None
 
     def show_board(self):
-        """Temporary board representation to print it to command line for manual tests,
-            before UI has been implemented.
+        """Board representation to print to command line.
         """
-        #for row in range(HEIGHT):
-        #    for col in range(WIDTH):
-        #        if self.board[row][col] == 1:
-        #            self.board[row][col] = "🟡"
-        #        if self.board[row][col] == 2:
-        #            self.board[row][col] = "🔴"
-        
-        for row in self.board:
-            print(f"{row}\n")
+
+        print("+----+----+----+----+----+----+----+")
+        for row in range(6):
+            print("|", end="")
+            for col in range(7):
+                if self.board[row][col] == 0:
+                    print("    |", end="")
+                elif self.board[row][col] == 1:
+                    print(" 🟡 |", end="")
+                else:
+                    print(" 🔴 |", end="")
+            print()
+            print("+----+----+----+----+----+----+----+")
+
 
     def check_valid_move(self, column_index):
         """Checks if a token can be dropped into the chosen column
@@ -253,3 +259,9 @@ class Board:
             The content of the specified square (int)
         """
         return self.board[row_index][column_index]
+
+
+if __name__ == "__main__":
+    board = Board()
+    board.make_move(3, 1)
+    board.show_board()

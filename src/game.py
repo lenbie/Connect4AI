@@ -53,7 +53,11 @@ class Game:
                     move_count +=1
                     self._check_draw(move_count)
 
-        print(f"Player {self._winner} wins!")
+        if self._winner == 1:
+            colour = "🟡"
+        if self._winner == 2:
+            colour = "🔴"
+        print(f"Player {colour} wins!")
         self._play_again()
 
     def _play_again(self):
@@ -69,7 +73,7 @@ class Game:
         Args:
             player: The current player (human or AI player)
         """
-        win = self.board.check_four_connected()#player)
+        win = self.board.check_four_connected()
         if win:
             self._win = True
             self._winner = player
@@ -136,11 +140,11 @@ class Game:
         The human player can select Player 1 (starting player) or player 2.
         The AI will be the player the human does not select.
         """
-        print("\nDo you want to play as Player 1 or Player 2?")
+        print("\nDo you want to play as Player 1 🟡 or Player 2 🔴?")
         choice = False
         while not choice:
             player_choice = str(
-                input("\nPlease enter 1 for Player 1, or 2 for player 2: "))
+                input("\nPlease enter 1 for 🟡, or 2 for 🔴: "))
             if player_choice == "1":
                 self._human_player = 1
                 self._ai_player = 2
@@ -150,7 +154,3 @@ class Game:
                 self._human_player = 2
                 self._ai_player = 1
                 choice = True
-
-
-if __name__ == "__main__":
-    pass

@@ -57,6 +57,8 @@ Create the html test coverage report using:
 poetry run invoke coverage-report
 ```
 
+The coverage report can be viewed from index.html in htmlcov.
+
 ### Pylint tests
 
 Create the pylint test report using:
