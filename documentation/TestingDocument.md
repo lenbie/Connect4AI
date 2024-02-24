@@ -24,7 +24,7 @@ The coverage report can be viewed from index.html in htmlcov.
 
 As of 24.02., there are 15 tests. More test for the AI class in particular will be added ASAP. All tests pass in 0.42 seconds. 
 
-![Test Coverage Report]()
+![Test Coverage Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/CoverageReport.png)
 
 
 ## Manual Testing
