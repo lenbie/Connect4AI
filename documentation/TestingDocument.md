@@ -22,9 +22,9 @@ The coverage report can be viewed from index.html in htmlcov.
 
 ### Current test coverage
 
-As of 24.02., there are 15 tests. More test for the AI class in particular will be added ASAP. All tests pass in 0.42 seconds. 
+As of 24.02., there are 15 tests. More test for the AI class in particular, but also the Game class will be added ASAP. However, the Game class is partially a UI class, so unit testing is not always appropriate here. Instead, manual testing was used. All tests pass in 0.42 seconds. 
 
-![Test Coverage Report]()
+![Test Coverage Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/CoverageReport.png)
 
 
 ## Manual Testing
