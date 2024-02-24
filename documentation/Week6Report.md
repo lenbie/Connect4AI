@@ -8,6 +8,7 @@
 - fixed that the correct player number of the winner is shown again, since connect 4 now checks for a win in general, and not for a specific person
 - now, draw should lead to play again - _check_draw function added, and play again turned into own function -also gotta write tests for this
 - updated the printout to terminal with emojis and a clearer board upon peer reviwer recommendation
+- in next_move, replaced score >= max_score with score > max_score, so it sticks to central col moves if otherwise equal
 
 TO DO
 - add iterative deepening and caching

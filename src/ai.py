@@ -43,8 +43,7 @@ class AI:
             minimax = self.minimax(depth, turn, alpha, beta, move, move_count)
             score = minimax[0]
 
-            print(score)
-            if score >= max_score:
+            if score > max_score:
                 max_score = score
                 best_move = move
 
