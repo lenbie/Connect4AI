@@ -69,9 +69,9 @@ class AI:
             value, best_move : The best move (int representing a column) and game state value belonging to that move
         """
 
-        nextTurn = 2 if turn == 1 else 1
+        next_turn = 2 if turn == 1 else 1
 
-        if self.board.check_four_connected():#ai_player):  # win
+        if self.board.check_four_connected(): # win
             if turn != self._ai_player:
                 return 1000000 + depth, prev_move
             return -1000000 - depth, prev_move
@@ -89,7 +89,7 @@ class AI:
                 self.board.make_move(move, turn)
                 move_count +=1
 
-                value, _ = self.minimax(depth-1, nextTurn, alpha, beta, move, move_count)
+                value, _ = self.minimax(depth-1, next_turn, alpha, beta, move, move_count)
 
                 self.board.undo_move(move)
                 move_count -=1
@@ -109,7 +109,7 @@ class AI:
             self.board.make_move(move, turn)
             move_count +=1
 
-            value, _ = self.minimax(depth-1, nextTurn, alpha, beta, move, move_count)
+            value, _ = self.minimax(depth-1, next_turn, alpha, beta, move, move_count)
 
             self.board.undo_move(move)
             move_count -=1

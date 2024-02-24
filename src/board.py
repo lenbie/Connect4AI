@@ -18,7 +18,7 @@ class Board:
             HEIGHT)]  # 0 represents empty cell
         self.win = False  # if anyone has won, but not currently in use
         self.move_count = 0
-        self.winner = None
+        self.winner = None #not currently in use
 
     def show_board(self):
         """Temporary board representation to print it to command line for manual tests,
@@ -92,7 +92,7 @@ class Board:
             if self.board[row][column_index] == 0:
                 return row
 
-    def check_four_connected(self):#, current_player):
+    def check_four_connected(self):
         """Checks if the current player has won.
             Calls functions to check if there will be four in a row, a column or a diagonal.
 

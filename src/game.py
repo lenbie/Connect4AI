@@ -22,12 +22,13 @@ class Game:
         self._ai_player = 2
 
         self._win = False
+        self._winner = None
 
     def play_game(self):
         """Main game loop, managing the AI and human player
             making moves until one of them wins.
         """
-        moves = 0
+        move_count = 0
 
         self.board.clear_board()
         self._select_start_player()
@@ -35,24 +36,31 @@ class Game:
         if self._human_player == 1:
             while not self._win:
                 self._player_move()
-                moves +=1
+                move_count +=1
+                self._check_draw(move_count)
                 if not self._win:
-                    self._ai_move(moves)
-                    moves +=1
+                    self._ai_move(move_count)
+                    move_count +=1
+                    self._check_draw(move_count)
 
         if self._ai_player == 1:
             while not self._win:
-                self._ai_move(moves)
-                moves +=1
+                self._ai_move(move_count)
+                move_count +=1
+                self._check_draw(move_count)
                 if not self._win:
                     self._player_move()
-                    moves +=1
+                    move_count +=1
+                    self._check_draw(move_count)
 
-        print(f"Player {self.board.winner} wins!")
+        print(f"Player {self._winner} wins!")
+        self._play_again()
 
+    def _play_again(self):
         again = input("\nDo you want to play again? Please type YES or NO: ")
         if again.lower() == "yes":
             self._win = False
+            self._winner = None
             self.play_game()
 
     def _check_win(self, player):
@@ -64,6 +72,22 @@ class Game:
         win = self.board.check_four_connected()#player)
         if win:
             self._win = True
+            self._winner = player
+
+    def _check_draw(self, move_count):
+        """Checks if a draw has occurred.
+
+        Args:
+            move_count (int): The number of moves played so far.
+
+        Returns:
+            True, if a draw has occurred - the board is full but no one has won
+            False, otherwise
+        """
+
+        if move_count== 42 and not self._win:
+            print("\nDraw!")
+            self._play_again()
 
     def _ai_move(self, moves):
         """Manages the AI making moves.
