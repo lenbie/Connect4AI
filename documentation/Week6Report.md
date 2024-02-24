@@ -1,16 +1,12 @@
 # Week 6 Report
 
-- game move count implemented as suggested on labtool
-- if col full, it doestn ask u to put again - fixed 
-- fixed winning in minimax at least manual testing it performs well, gotta add unit tests still
-- didnt need to rewrite connect 4 checker, could still do it for efficiency but it wasnt the problem
-- updating alpha in next move was an issue, and also the player turns - since next move is kinda first iteration of minimax, needs to call the minimizing player first, and then also player one was maximising by default, and now it was changed to use the self._ai_player and then check if its that players turn, which means its maximizing 
-- fixed that the correct player number of the winner is shown again, since connect 4 now checks for a win in general, and not for a specific person
-- now, draw should lead to play again - _check_draw function added, and play again turned into own function -also gotta write tests for this
-- updated the printout to terminal with emojis and a clearer board upon peer reviwer recommendation
-- in next_move, replaced score >= max_score with score > max_score, so it sticks to central col moves if otherwise equal
+This week, I finally managed to fix the issues with the minimax, so now it prevents opponent's winning moves, and I have not been able to beat it since.
+I realised that the problem was not the functions checking whether a player had won, but some confusion with the actual minimax and next_move. Since next_move is basically the first iteration of the minimax, minimax needs to be called for the minimizing player first. Also, player 1 was hard-coded as maximising player, which did not make sense since the AI can be either player 1 or 2. Hence, I changed it so the minimax keeps track of whose turn it is, and since the AI class keeps track of which player the AI is in each game, the minimax checks if it's the maximising player's turn by checking if the player whose turn it is is the same as the AI player for that game (self._ai_player). Also, updating alpha in next_move ended up messing up the AI moves a lot, and upon removing this, it immediately did really well. I could still rewrite the checking for win for efficiency, but correctness is not an issue. I also realised that in the next_move function, replacing score >= max_score with score > max_score leads the AI to stick to central column moves if evaluations are otherwise equal, which is desirable.
 
-TO DO
-- add iterative deepening and caching
-- add documentation
-- implement codecov upon rec by peer reviewer
+I also made smaller fixes and changes: I implemented the game move count, as suggested on labtool, and thus changed how a draw is checked for. I also realised that nothing was happening in the Game class upon a draw, so now the Game class also recognizes draws, prints a corresponding message and prompts the _play_again function, which I separated from play_game. Also, the Game class now prompts a new column input if the player enters the number of a full column. Previously, this just ended the game prematurely. Since I had previously made the win checking function in Board player-agnostic, the Game class did not print which player had won if a win occurred. I now fixed this, so the Game class keeps track of the winner and prints it. I also updated the way the game board is displayed in the terminal upon recommendation of a peer reviwer, using emojis and a clearer board representation. 
+
+I also added the remaining documentation, they are not fully completed but in a good state for now. I am considering adding codecov upon peer reviewer recommendation to display a badge in README. Finally, I did the second peer review, which was again enjoyable, especially since it was also a Connect 4 game, and it was very interesting to see how another person implemented it.
+
+The key things I want to work on asap are expanding testing, especially of the AI class, and where possible, the Game class (although this is partially a UI class, where unit testing is not appropriate). And very importantly, I want to work on adding iterative deepending and caching. I am confident that I will be able to do this fairly quickly, as I spent time this week researching iterative deepending and caching, so I have a good understanding of how to integrate them into my code, I just need to implement it this weekend when I have more time allocated for the project.
+
+Time spent: 7 hours
