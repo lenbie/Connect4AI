@@ -4,6 +4,8 @@ from board import Board
 VERY_LARGE_NUMBER = math.inf
 VERY_SMALL_NUMBER = -math.inf
 
+#CHECK
+
 
 class AI:
     def __init__(self, board: Board):
@@ -13,7 +15,7 @@ class AI:
             board (Board): The game board
         """
         self.board = board
-        self._ai_player = 2  # AI plays second by default
+        self._ai_player = 1
 
     def next_move(self, player, move_count):
         """Finds the next move to make, aiming to find the best possible one.
@@ -25,41 +27,41 @@ class AI:
         Returns:
             best_move (int): The column into which the AI makes its next move.
         """
-        self._ai_player = player
+        self._current_player = player
 
         max_score = alpha = VERY_SMALL_NUMBER
         min_score = beta = VERY_LARGE_NUMBER
 
         best_move = 0
-        depth = 4
+        depth = 1
 
         for move in self.get_possible_moves():
 
-            self.board.make_move(move, self._ai_player)
+            self.board.make_move(move, self._current_player)
             move_count +=1
 
-            turn = 2 if self._ai_player == 1 else 1
+            #player_one = bool(self._current_player == 1)
 
-            minimax = self.minimax(depth, turn, alpha, beta, move, move_count)
+            minimax = self.minimax(depth, False, alpha, beta, move, move_count)
             score = minimax[0]
 
-            print(score)
+            print(f"Move: {move} gets score: {score}")
             if score >= max_score:
                 max_score = score
-                best_move = move
+                best_move = minimax[1]
+                alpha = score
 
             self.board.undo_move(move)
             move_count-=1
 
-        print(best_move)
         return best_move
 
-    def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count):
+    def minimax(self, depth: int, maximising: bool, alpha, beta, prev_move, move_count):
         """Recursive minimax algorithm function, with alpha beta pruning.
 
         Args:
             depth (int): The depth to which the minimax algorithm searches game states
-            player_one (bool): True if the AI is player 1, False if player 2
+            maximising (bool): 
             alpha, beta (float): Alpha -beta pruning values
             prev_move (int): The previous move made
             move_count (int): The number of moves made in the game so far
@@ -68,11 +70,11 @@ class AI:
         Returns:
             value, best_move : The best move (int representing a column) and game state value belonging to that move
         """
+        print(f"maximising: {maximising}")
+        self.board.show_board()
 
-        nextTurn = 2 if turn == 1 else 1
-
-        if self.board.check_four_connected():#ai_player):  # win
-            if turn != self._ai_player:
+        if self.board.check_four_connected():#current_player):  # win
+            if not maximising:
                 return 1000000 + depth, prev_move
             return -1000000 - depth, prev_move
 
@@ -83,13 +85,13 @@ class AI:
             score = self.evaluate_board()
             return score, prev_move
 
-        if turn == self._ai_player:
+        if maximising:
             max_value = VERY_SMALL_NUMBER
             for move in self.get_possible_moves():
-                self.board.make_move(move, turn)
+                self.board.make_move(move, 1)
                 move_count +=1
 
-                value, _ = self.minimax(depth-1, nextTurn, alpha, beta, move, move_count)
+                value, _ = self.minimax(depth-1, False, alpha, beta, move, move_count)
 
                 self.board.undo_move(move)
                 move_count -=1
@@ -106,10 +108,10 @@ class AI:
 
         min_value = VERY_LARGE_NUMBER
         for move in self.get_possible_moves():
-            self.board.make_move(move, turn)
+            self.board.make_move(move, 2)
             move_count +=1
 
-            value, _ = self.minimax(depth-1, nextTurn, alpha, beta, move, move_count)
+            value, _ = self.minimax(depth-1, True, alpha, beta, move, move_count)
 
             self.board.undo_move(move)
             move_count -=1
@@ -145,15 +147,16 @@ class AI:
         return sorted_moves
 
     def _evaluate_window(self, window):
-        """Part of the heuristic evaluation of the board state
-        Assigns points depending on how many pieces each player has
+        """Part of the heuristic evaluation of the board state for the current player.
+        Assigns points depending on how many pieces the player (and opponent) has
         in the vicinity of four squares.
 
         Args:
             window: A section of the game board (horizontal, vertical or diagonal)
+            player (int): current player
 
         Returns:
-            score (int): The score assigned for the window.
+            score (int): The points assigned to the current player for that window.
         """
 
         score = 0
@@ -209,6 +212,4 @@ class AI:
                           self.board.board[row + 2][col - 2], self.board.board[row + 3][col - 3]]
                 score += self._evaluate_window(window)
 
-        if self._ai_player == 1:
-            return score
-        return -score
+        return score
