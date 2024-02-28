@@ -13,34 +13,32 @@ class AI:
             board (Board): The game board
         """
         self.board = board
-        self._ai_player = 2  # AI plays second by default
 
-    def next_move(self, player, move_count):
+    def next_move(self, ai_player, move_count):
         """Finds the next move to make, aiming to find the best possible one.
 
         Args:
-            player (int): Which player (1 or 2) the AI is playing
+            ai_player (int): Which player (1 or 2) the AI is playing
             move_count (int): Moves in the game so far
 
         Returns:
             best_move (int): The column into which the AI makes its next move.
         """
-        self._ai_player = player
 
-        max_score = alpha = VERY_SMALL_NUMBER
-        min_score = beta = VERY_LARGE_NUMBER
+        max_score = VERY_SMALL_NUMBER # alpha
+        min_score = VERY_LARGE_NUMBER # beta
 
         best_move = 0
-        depth = 4
+        depth = 5
 
         for move in self.get_possible_moves():
 
-            self.board.make_move(move, self._ai_player)
+            self.board.make_move(move, ai_player)
             move_count +=1
 
-            turn = 2 if self._ai_player == 1 else 1
+            turn = 2 if ai_player == 1 else 1
 
-            minimax = self.minimax(depth, turn, alpha, beta, move, move_count)
+            minimax = self.minimax(depth, turn, max_score, min_score, move, move_count, ai_player)
             score = minimax[0]
 
             if score > max_score:
@@ -50,28 +48,26 @@ class AI:
             self.board.undo_move(move)
             move_count-=1
 
-        print(best_move)
         return best_move
 
-    def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count):
+    def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player):
         """Recursive minimax algorithm function, with alpha beta pruning.
 
         Args:
             depth (int): The depth to which the minimax algorithm searches game states
-            player_one (bool): True if the AI is player 1, False if player 2
+            turn (int): 1 or 2, depending on whose turn it is. If ai_play == turn, it is the maximising (AI) player's turn
             alpha, beta (float): Alpha -beta pruning values
             prev_move (int): The previous move made
             move_count (int): The number of moves made in the game so far
+            ai_player (int): Whether the AI is playing player 1 or 2 in this game
 
 
         Returns:
             value, best_move : The best move (int representing a column) and game state value belonging to that move
         """
 
-        next_turn = 2 if turn == 1 else 1
-
         if self.board.check_four_connected(): # win
-            if turn != self._ai_player:
+            if turn != ai_player:
                 return 1000000 + depth, prev_move
             return -1000000 - depth, prev_move
 
@@ -79,16 +75,16 @@ class AI:
             return 0, prev_move
 
         if depth == 0:
-            score = self.evaluate_board()
+            score = self.evaluate_board(ai_player)
             return score, prev_move
 
-        if turn == self._ai_player:
+        if turn == ai_player:
             max_value = VERY_SMALL_NUMBER
             for move in self.get_possible_moves():
                 self.board.make_move(move, turn)
                 move_count +=1
 
-                value, _ = self.minimax(depth-1, next_turn, alpha, beta, move, move_count)
+                value, _ = self.minimax(depth-1, 3-turn, alpha, beta, move, move_count, ai_player) # Since turn is either 1 or 2, 3 - turn gives the other player number
 
                 self.board.undo_move(move)
                 move_count -=1
@@ -108,7 +104,7 @@ class AI:
             self.board.make_move(move, turn)
             move_count +=1
 
-            value, _ = self.minimax(depth-1, next_turn, alpha, beta, move, move_count)
+            value, _ = self.minimax(depth-1, 3-turn, alpha, beta, move, move_count, ai_player)
 
             self.board.undo_move(move)
             move_count -=1
@@ -172,7 +168,7 @@ class AI:
 
         return score
 
-    def evaluate_board(self):
+    def evaluate_board(self, ai_player):
         """Main heuristic evaluation function. Splits the game board into window sections 
         to be evaluated by the _evaluate_window function.
 
@@ -208,6 +204,6 @@ class AI:
                           self.board.board[row + 2][col - 2], self.board.board[row + 3][col - 3]]
                 score += self._evaluate_window(window)
 
-        if self._ai_player == 1:
+        if ai_player == 1:
             return score
         return -score
