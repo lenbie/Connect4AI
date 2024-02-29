@@ -1,5 +1,5 @@
-from board import Board
-from ai import AI
+from services.board import Board
+from services.ai import AI
 
 
 class Game:

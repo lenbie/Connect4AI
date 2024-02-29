@@ -1,5 +1,6 @@
 import math
-from board import Board
+import time
+from services.board import Board
 
 VERY_LARGE_NUMBER = math.inf
 VERY_SMALL_NUMBER = -math.inf
@@ -28,27 +29,75 @@ class AI:
         max_score = VERY_SMALL_NUMBER # alpha
         min_score = VERY_LARGE_NUMBER # beta
 
-        best_move = 0
-        depth = 5
+        best_move = 3
+        max_depth = 100
 
-        for move in self.get_possible_moves():
+        start_time = time.time()
+        move_time = 5
 
-            self.board.make_move(move, ai_player)
-            move_count +=1
+        for depth in range(1, max_depth + 1):
+                
+            max_score = VERY_SMALL_NUMBER # alpha
+            min_score = VERY_LARGE_NUMBER # beta
 
-            turn = 2 if ai_player == 1 else 1
+            moves = self.get_possible_moves()
+            if best_move in moves:
+                moves.remove(best_move)
+                moves.insert(0, best_move)
 
-            minimax = self.minimax(depth, turn, max_score, min_score, move, move_count, ai_player)
-            score = minimax[0]
+            for move in moves:
+                if time.time() - start_time >= move_time: #Time limit exceeded
+                    print("Time Exceeded")
+                    return best_move
 
+                self.board.make_move(move, ai_player)
+                move_count +=1
+
+                turn = 2 if ai_player == 1 else 1
+
+                minimax = self.minimax(depth, turn, max_score, min_score, move, move_count, ai_player)
+                score = minimax[0]
+
+                if score > max_score:
+                    max_score = score
+                    best_move = move
+
+                self.board.undo_move(move)
+                move_count-=1
+
+            #print(best_move)
+        return best_move
+
+    def iterative_deepening(self, ai_player, move_count, prev_move):
+        max_score = VERY_SMALL_NUMBER # alpha
+        min_score = VERY_LARGE_NUMBER # beta
+
+        depth = 4
+       
+        turn = ai_player
+
+        start_time = time.time()
+        move_time = 5
+        best_move = 3
+
+        for depth in range(1, depth + 2):
+        # Check if time limit has been exceeded
+            if time.time() - start_time >= move_time:
+                break
+                
+            max_score = VERY_SMALL_NUMBER # alpha
+            min_score = VERY_LARGE_NUMBER # beta
+
+            score, move = self.minimax(depth, turn, max_score, min_score, prev_move, move_count, ai_player)
+            
             if score > max_score:
                 max_score = score
                 best_move = move
 
-            self.board.undo_move(move)
-            move_count-=1
 
+        #print(move)
         return best_move
+
 
     def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player):
         """Recursive minimax algorithm function, with alpha beta pruning.
@@ -207,3 +256,14 @@ class AI:
         if ai_player == 1:
             return score
         return -score
+
+
+if __name__ == "__main__":
+    board = Board()
+    ai = AI(board)
+    board.make_move(3, 1)
+    move = ai.iterative_deepening(2, 1, 3)
+    move2 = ai.next_move(2, 1)
+    print(move)
+    print(move2)
+    # differences in making move 2, 3, 4

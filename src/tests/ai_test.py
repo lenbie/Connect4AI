@@ -1,7 +1,7 @@
 import unittest
 
-from ai import AI
-from board import Board
+from services.ai import AI
+from services.board import Board
 
 test_board = Board()
 

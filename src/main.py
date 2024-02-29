@@ -1,6 +1,6 @@
-from board import Board
-from game import Game
-from ai import AI
+from services.board import Board
+from services.game import Game
+from services.ai import AI
 
 def main():
     board = Board()

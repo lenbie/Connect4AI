@@ -1,6 +1,6 @@
 import unittest
 
-from board import Board
+from services.board import Board
 
 
 class TestBoard(unittest.TestCase):
