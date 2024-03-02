@@ -1,7 +1,11 @@
 import unittest
+import math
 
 from services.ai import AI
 from services.board import Board
+
+VERY_LARGE_NUMBER = math.inf
+VERY_SMALL_NUMBER = -math.inf
 
 test_board = Board()
 
@@ -87,3 +91,68 @@ class TestAI(unittest.TestCase):
         moves = self.ai.get_possible_moves()
 
         self.assertEqual(moves, [3, 2, 4, 1, 0, 6])
+
+    def test_cache_entries(self):
+        test_board.clear_board()
+        test_board.make_move(3, 1)
+
+        ai_player = turn = 2
+        depth = 2
+        cache = {}
+        alpha = VERY_SMALL_NUMBER
+        beta = VERY_LARGE_NUMBER
+        prev_move = 3
+        move_count = 1
+
+        self.ai.minimax(depth, turn, alpha, beta, prev_move,
+                        move_count, ai_player, cache)
+
+        state = test_board.board.copy()
+        state[4][3] = 2
+        state = tuple(map(tuple, state))
+        key = (state, turn, depth)
+
+        check = False
+        for key in cache:
+            if key[0] == state:
+                check = True
+        # because in this case, the AI should make move 3, meaning it will evaluate it as part of the minimax and store evaluation in cache
+
+        self.assertEqual(check, True)
+
+    def test_draw(self):
+        test_board.clear_board()
+
+        test_board.board = [
+            [0, 2, 1, 2, 1, 2, 1],
+            [2, 1, 2, 1, 2, 1, 2],
+            [1, 1, 2, 1, 2, 1, 2],
+            [2, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1],
+            [2, 1, 2, 1, 2, 1, 2]]
+
+        score, move = self.ai.minimax(
+            4, 1, VERY_SMALL_NUMBER, VERY_LARGE_NUMBER, 1, 41, 1, {})
+
+        self.assertEqual(score, 0)
+        self.assertEqual(move, 0)
+
+    def test_multiple_wins(self):
+        test_board.clear_board()
+
+        test_board.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0],
+            [1, 1, 0, 1, 2, 0, 2],
+            [2, 2, 1, 2, 1, 1, 1],
+            [1, 2, 1, 1, 2, 1, 1],
+            [2, 1, 1, 1, 2, 1, 2]]
+
+        wins = [2, 5]
+
+        score, move = self.ai.minimax(
+            4, 1, VERY_SMALL_NUMBER, VERY_LARGE_NUMBER, 1, 27, 1, {})
+        found_move = move in wins
+
+        self.assertEqual(score > 10000, True)
+        self.assertEqual(found_move, True)

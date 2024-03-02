@@ -36,21 +36,21 @@ class Game:
         if self._human_player == 1:
             while not self._win:
                 self._player_move()
-                move_count +=1
+                move_count += 1
                 self._check_draw(move_count)
                 if not self._win:
                     self._ai_move(move_count)
-                    move_count +=1
+                    move_count += 1
                     self._check_draw(move_count)
 
         if self._ai_player == 1:
             while not self._win:
                 self._ai_move(move_count)
-                move_count +=1
+                move_count += 1
                 self._check_draw(move_count)
                 if not self._win:
                     self._player_move()
-                    move_count +=1
+                    move_count += 1
                     self._check_draw(move_count)
 
         if self._winner == 1:
@@ -89,7 +89,7 @@ class Game:
             False, otherwise
         """
 
-        if move_count== 42 and not self._win:
+        if move_count == 42 and not self._win:
             print("\nDraw!")
             self._play_again()
 
@@ -123,7 +123,7 @@ class Game:
             try:
                 number = int(col)
                 if self.board.check_valid_move(number):
-                    move = self.board.make_move(number, player)
+                    self.board.make_move(number, player)
                     choice = True
                 else:
                     print("\nInput is not a valid move.")

@@ -25,7 +25,7 @@ class AICopy:
         Returns:
             best_move (int): The column into which the AI makes its next move.
         """
-    
+
         max_score = alpha = VERY_SMALL_NUMBER
         beta = VERY_LARGE_NUMBER
 
@@ -35,11 +35,12 @@ class AICopy:
         for move in self.get_possible_moves():
 
             self.board.make_move(move, ai_player)
-            move_count +=1
+            move_count += 1
 
             turn = 2 if ai_player == 1 else 1
 
-            minimax = self.minimax(depth, turn, alpha, beta, move, move_count, ai_player)
+            minimax = self.minimax(
+                depth, turn, alpha, beta, move, move_count, ai_player)
             score = minimax[0]
 
             if score > max_score:
@@ -47,10 +48,10 @@ class AICopy:
                 best_move = move
 
             self.board.undo_move(move)
-            move_count-=1
+            move_count -= 1
 
         return best_move
-    
+
     def next_move_alpha_updates(self, ai_player, move_count):
         """Finds the next move to make, aiming to find the best possible one.
 
@@ -71,11 +72,12 @@ class AICopy:
         for move in self.get_possible_moves():
 
             self.board.make_move(move, ai_player)
-            move_count +=1
+            move_count += 1
 
             turn = 2 if ai_player == 1 else 1
 
-            minimax = self.minimax(depth, turn, max_score, min_score, move, move_count, ai_player)
+            minimax = self.minimax(
+                depth, turn, max_score, min_score, move, move_count, ai_player)
             score = minimax[0]
 
             if score > max_score:
@@ -83,10 +85,10 @@ class AICopy:
                 best_move = move
 
             self.board.undo_move(move)
-            move_count-=1
+            move_count -= 1
 
         return best_move
-    
+
     def next_move_iterative_deepening(self, ai_player, move_count):
         """Finds the next move to make, aiming to find the best possible one.
 
@@ -98,8 +100,8 @@ class AICopy:
             best_move (int): The column into which the AI makes its next move.
         """
 
-        max_score = VERY_SMALL_NUMBER # alpha
-        min_score = VERY_LARGE_NUMBER # beta
+        max_score = VERY_SMALL_NUMBER  # alpha
+        min_score = VERY_LARGE_NUMBER  # beta
 
         best_move = 3
         max_depth = 5
@@ -108,9 +110,9 @@ class AICopy:
         move_time = 5
 
         for depth in range(1, max_depth + 1):
-                
-            max_score = VERY_SMALL_NUMBER # alpha
-            min_score = VERY_LARGE_NUMBER # beta
+
+            max_score = VERY_SMALL_NUMBER  # alpha
+            min_score = VERY_LARGE_NUMBER  # beta
 
             moves = self.get_possible_moves()
             if best_move in moves:
@@ -118,16 +120,17 @@ class AICopy:
                 moves.insert(0, best_move)
 
             for move in moves:
-                if time.time() - start_time >= move_time: #Time limit exceeded
+                if time.time() - start_time >= move_time:  # Time limit exceeded
                     print("Time Exceeded")
                     return best_move
 
                 self.board.make_move(move, ai_player)
-                move_count +=1
+                move_count += 1
 
                 turn = 2 if ai_player == 1 else 1
 
-                minimax = self.minimax(depth, turn, max_score, min_score, move, move_count, ai_player)
+                minimax = self.minimax(
+                    depth, turn, max_score, min_score, move, move_count, ai_player)
                 score = minimax[0]
 
                 if score > max_score:
@@ -135,10 +138,9 @@ class AICopy:
                     best_move = move
 
                 self.board.undo_move(move)
-                move_count-=1
+                move_count -= 1
 
         return best_move
-
 
     def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player):
         """Recursive minimax algorithm function, with alpha beta pruning.
@@ -156,7 +158,7 @@ class AICopy:
             value, best_move : The best move (int representing a column) and game state value belonging to that move
         """
 
-        if self.board.check_four_connected(): # win
+        if self.board.check_four_connected():  # win
             if turn != ai_player:
                 return 1000000 + depth, prev_move
             return -1000000 - depth, prev_move
@@ -172,12 +174,14 @@ class AICopy:
             max_value = VERY_SMALL_NUMBER
             for move in self.get_possible_moves():
                 self.board.make_move(move, turn)
-                move_count +=1
+                move_count += 1
 
-                value, _ = self.minimax(depth-1, 3-turn, alpha, beta, move, move_count, ai_player) # Since turn is either 1 or 2, 3 - turn gives the other player number
+                # Since turn is either 1 or 2, 3 - turn gives the other player number
+                value, _ = self.minimax(
+                    depth-1, 3-turn, alpha, beta, move, move_count, ai_player)
 
                 self.board.undo_move(move)
-                move_count -=1
+                move_count -= 1
 
                 if value > max_value:
                     max_value = value
@@ -192,12 +196,13 @@ class AICopy:
         min_value = VERY_LARGE_NUMBER
         for move in self.get_possible_moves():
             self.board.make_move(move, turn)
-            move_count +=1
+            move_count += 1
 
-            value, _ = self.minimax(depth-1, 3-turn, alpha, beta, move, move_count, ai_player)
+            value, _ = self.minimax(
+                depth-1, 3-turn, alpha, beta, move, move_count, ai_player)
 
             self.board.undo_move(move)
-            move_count -=1
+            move_count -= 1
 
             if value < min_value:
                 min_value = value
@@ -311,7 +316,7 @@ if __name__ == "__main__":
 
     move_count = 5
     ai_player = 2
-    
+
     print("Depth 5\n")
 
     print("Timing iterative deepening")
@@ -321,7 +326,6 @@ if __name__ == "__main__":
     total_time = end_time - start_time
     print(total_time)
     print("")
-
 
     print("Timing alpha-beta pruning in next move")
     start_time = time.time()
@@ -338,4 +342,3 @@ if __name__ == "__main__":
     total_time = end_time - start_time
     print(total_time)
     print("")
-

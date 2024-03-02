@@ -16,10 +16,10 @@ class Board:
         """
         self.board = [[0 for i in range(WIDTH)] for j in range(
             HEIGHT)]  # 0 represents empty cell
-        
+
         # The three below are not currently in use, will likely get rid of them
         self.win = False
-        self.move_count = 0 
+        self.move_count = 0
         self.winner = None
 
     def show_board(self):
@@ -38,7 +38,6 @@ class Board:
                     print(" 🔴 |", end="")
             print()
             print("+----+----+----+----+----+----+----+")
-
 
     def check_valid_move(self, column_index):
         """Checks if a token can be dropped into the chosen column
@@ -110,8 +109,7 @@ class Board:
             True, if the current player has won.
             False, if no win has been achieved.
         """
-        #if current_player == self._check_all_rows() or current_player == self._check_all_cols() or current_player == self._check_diag_whole_board():
-            #self.winner = current_player
+
         if self._check_all_rows() or self._check_all_cols() or self._check_diag_whole_board():
             return True
         return False
@@ -128,8 +126,7 @@ class Board:
                 if self.board[row][col] != 0:
                     if self._check_col(row, col):
                         return True
-                        #winner = self.board[row][col]
-                        #return winner
+        return False
 
     def _check_col(self, row, col):
         """Checks if there are four connected in a column
@@ -160,9 +157,8 @@ class Board:
             for row in range(6):
                 if self.board[row][col] != 0:
                     if self._check_row(row, col):
-                        #winner = self.board[row][col]
-                        #return winner
                         return True
+        return False
 
     def _check_row(self, row, col):
         """Checks if there are four connected in a row
@@ -193,17 +189,14 @@ class Board:
             for col in range(0, 4):
                 if self.board[row][col] != 0:
                     if self._check_right_down_diagonals(row, col):
-                        #winner = self.board[row][col]
-                        #return winner
                         return True
 
         for row in range(5, 2, -1):
             for col in range(0, 4):
                 if self.board[row][col] != 0:
                     if self._check_right_up_diagonals(row, col):
-                        #winner = self.board[row][col]
-                        #return winner
                         return True
+        return False
 
     def _check_right_down_diagonals(self, row, col):
         """Checks if there are four connected in a right downward diagonal

@@ -2,6 +2,7 @@ from services.board import Board
 from services.game import Game
 from services.ai import AI
 
+
 def main():
     board = Board()
     ai = AI(board)

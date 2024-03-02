@@ -26,19 +26,22 @@ class AI:
             best_move (int): The column into which the AI makes its next move.
         """
 
-        max_score = VERY_SMALL_NUMBER # alpha
-        min_score = VERY_LARGE_NUMBER # beta
+        max_score = VERY_SMALL_NUMBER  # alpha
+        min_score = VERY_LARGE_NUMBER  # beta
 
         best_move = 3
-        max_depth = 100
+        max_depth = 5
+
+        move_time = 2
+
+        cache = {}
 
         start_time = time.time()
-        move_time = 5
 
         for depth in range(1, max_depth + 1):
-                
-            max_score = VERY_SMALL_NUMBER # alpha
-            min_score = VERY_LARGE_NUMBER # beta
+
+            max_score = VERY_SMALL_NUMBER  # alpha
+            min_score = VERY_LARGE_NUMBER  # beta
 
             moves = self.get_possible_moves()
             if best_move in moves:
@@ -46,16 +49,17 @@ class AI:
                 moves.insert(0, best_move)
 
             for move in moves:
-                if time.time() - start_time >= move_time: #Time limit exceeded
+                if time.time() - start_time >= move_time:  # Time limit exceeded
                     print("Time Exceeded")
                     return best_move
 
                 self.board.make_move(move, ai_player)
-                move_count +=1
+                move_count += 1
 
                 turn = 2 if ai_player == 1 else 1
 
-                minimax = self.minimax(depth, turn, max_score, min_score, move, move_count, ai_player)
+                minimax = self.minimax(
+                    depth, turn, max_score, min_score, move, move_count, ai_player, cache)
                 score = minimax[0]
 
                 if score > max_score:
@@ -63,48 +67,17 @@ class AI:
                     best_move = move
 
                 self.board.undo_move(move)
-                move_count-=1
+                move_count -= 1
 
-            #print(best_move)
         return best_move
 
-    def iterative_deepening(self, ai_player, move_count, prev_move):
-        max_score = VERY_SMALL_NUMBER # alpha
-        min_score = VERY_LARGE_NUMBER # beta
-
-        depth = 4
-       
-        turn = ai_player
-
-        start_time = time.time()
-        move_time = 5
-        best_move = 3
-
-        for depth in range(1, depth + 2):
-        # Check if time limit has been exceeded
-            if time.time() - start_time >= move_time:
-                break
-                
-            max_score = VERY_SMALL_NUMBER # alpha
-            min_score = VERY_LARGE_NUMBER # beta
-
-            score, move = self.minimax(depth, turn, max_score, min_score, prev_move, move_count, ai_player)
-            
-            if score > max_score:
-                max_score = score
-                best_move = move
-
-
-        #print(move)
-        return best_move
-
-
-    def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player):
+    def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player, cache):
         """Recursive minimax algorithm function, with alpha beta pruning.
 
         Args:
             depth (int): The depth to which the minimax algorithm searches game states
-            turn (int): 1 or 2, depending on whose turn it is. If ai_play == turn, it is the maximising (AI) player's turn
+            turn (int): 1 or 2, depending on whose turn it is.
+                        If ai_play == turn, it is the maximising (AI) player's turn
             alpha, beta (float): Alpha -beta pruning values
             prev_move (int): The previous move made
             move_count (int): The number of moves made in the game so far
@@ -112,10 +85,13 @@ class AI:
 
 
         Returns:
-            value, best_move : The best move (int representing a column) and game state value belonging to that move
+            value, best_move : The best move (int representing a column)
+                                and game state value belonging to that move
         """
+        state = tuple(map(tuple, self.board.board))
+        cache_key = (state, turn, depth)
 
-        if self.board.check_four_connected(): # win
+        if self.board.check_four_connected():  # win
             if turn != ai_player:
                 return 1000000 + depth, prev_move
             return -1000000 - depth, prev_move
@@ -127,20 +103,28 @@ class AI:
             score = self.evaluate_board(ai_player)
             return score, prev_move
 
+        moves = self.get_possible_moves()
+        if cache_key in cache:
+            moves.remove(cache_key[1])
+            moves.insert(0, cache_key[1])
+
         if turn == ai_player:
             max_value = VERY_SMALL_NUMBER
-            for move in self.get_possible_moves():
+            for move in moves:
                 self.board.make_move(move, turn)
-                move_count +=1
+                move_count += 1
 
-                value, _ = self.minimax(depth-1, 3-turn, alpha, beta, move, move_count, ai_player) # Since turn is either 1 or 2, 3 - turn gives the other player number
+                value, _ = self.minimax(
+                    depth-1, 3-turn, alpha, beta, move, move_count, ai_player, cache)
+                # Since turn is either 1 or 2, 3 - turn gives the other player number
 
                 self.board.undo_move(move)
-                move_count -=1
+                move_count -= 1
 
                 if value > max_value:
                     max_value = value
                     best_move = move
+                    cache[cache_key] = max_value, best_move
 
                 if value >= beta:
                     break
@@ -149,18 +133,20 @@ class AI:
             return max_value, best_move
 
         min_value = VERY_LARGE_NUMBER
-        for move in self.get_possible_moves():
+        for move in moves:
             self.board.make_move(move, turn)
-            move_count +=1
+            move_count += 1
 
-            value, _ = self.minimax(depth-1, 3-turn, alpha, beta, move, move_count, ai_player)
+            value, _ = self.minimax(
+                depth-1, 3-turn, alpha, beta, move, move_count, ai_player, cache)
 
             self.board.undo_move(move)
-            move_count -=1
+            move_count -= 1
 
             if value < min_value:
                 min_value = value
                 best_move = move
+                cache[cache_key] = min_value, best_move
 
             if value <= alpha:
                 break
@@ -256,14 +242,3 @@ class AI:
         if ai_player == 1:
             return score
         return -score
-
-
-if __name__ == "__main__":
-    board = Board()
-    ai = AI(board)
-    board.make_move(3, 1)
-    move = ai.iterative_deepening(2, 1, 3)
-    move2 = ai.next_move(2, 1)
-    print(move)
-    print(move2)
-    # differences in making move 2, 3, 4
