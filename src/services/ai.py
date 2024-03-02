@@ -89,7 +89,7 @@ class AI:
                                 and game state value belonging to that move
         """
         state = tuple(map(tuple, self.board.board))
-        cache_key = (state, turn, depth) 
+        cache_key = (state, turn)
 
         if self.board.check_four_connected():  # win
             if turn != ai_player:

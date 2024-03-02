@@ -16,15 +16,7 @@ class AICopy:
         self.board = board
     
     def next_move_caching(self, ai_player, move_count):
-        """Finds the next move to make, aiming to find the best possible one.
 
-        Args:
-            ai_player (int): Which player (1 or 2) the AI is playing
-            move_count (int): Moves in the game so far
-
-        Returns:
-            best_move (int): The column into which the AI makes its next move.
-        """
 
         max_score = VERY_SMALL_NUMBER  # alpha
         min_score = VERY_LARGE_NUMBER  # beta
@@ -72,24 +64,9 @@ class AICopy:
         return best_move
 
     def minimax_caching(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player, cache):
-        """Recursive minimax algorithm function, with alpha beta pruning.
 
-        Args:
-            depth (int): The depth to which the minimax algorithm searches game states
-            turn (int): 1 or 2, depending on whose turn it is.
-                        If ai_play == turn, it is the maximising (AI) player's turn
-            alpha, beta (float): Alpha -beta pruning values
-            prev_move (int): The previous move made
-            move_count (int): The number of moves made in the game so far
-            ai_player (int): Whether the AI is playing player 1 or 2 in this game
-
-
-        Returns:
-            value, best_move : The best move (int representing a column)
-                                and game state value belonging to that move
-        """
         state = tuple(map(tuple, self.board.board))
-        cache_key = (state, turn)#, depth) 
+        cache_key = (state, turn) 
 
         if self.board.check_four_connected():  # win
             if turn != ai_player:
@@ -118,7 +95,6 @@ class AICopy:
 
                 value, _ = self.minimax_caching(
                     depth-1, 3-turn, alpha, beta, move, move_count, ai_player, cache)
-                # Since turn is either 1 or 2, 3 - turn gives the other player number
 
                 self.board.undo_move(move)
                 move_count -= 1
@@ -157,20 +133,11 @@ class AICopy:
         return min_value, best_move
 
     def next_move_no_alpha_updates(self, ai_player, move_count):
-        """Finds the next move to make, aiming to find the best possible one.
-
-        Args:
-            player (int): Which player (1 or 2) the AI is playing
-            move_count (int): Moves in the game so far
-
-        Returns:
-            best_move (int): The column into which the AI makes its next move.
-        """
 
         max_score = alpha = VERY_SMALL_NUMBER
         beta = VERY_LARGE_NUMBER
 
-        best_move = 0
+        best_move = 3
         depth = 5
 
         for move in self.get_possible_moves():
@@ -194,20 +161,11 @@ class AICopy:
         return best_move
 
     def next_move_alpha_updates(self, ai_player, move_count):
-        """Finds the next move to make, aiming to find the best possible one.
-
-        Args:
-            player (int): Which player (1 or 2) the AI is playing
-            move_count (int): Moves in the game so far
-
-        Returns:
-            best_move (int): The column into which the AI makes its next move.
-        """
 
         max_score = VERY_SMALL_NUMBER
         min_score = VERY_LARGE_NUMBER
 
-        best_move = 0
+        best_move = 3
         depth = 5
 
         for move in self.get_possible_moves():
@@ -231,15 +189,6 @@ class AICopy:
         return best_move
 
     def next_move_iterative_deepening(self, ai_player, move_count):
-        """Finds the next move to make, aiming to find the best possible one.
-
-        Args:
-            ai_player (int): Which player (1 or 2) the AI is playing
-            move_count (int): Moves in the game so far
-
-        Returns:
-            best_move (int): The column into which the AI makes its next move.
-        """
 
         max_score = VERY_SMALL_NUMBER  # alpha
         min_score = VERY_LARGE_NUMBER  # beta
@@ -284,20 +233,6 @@ class AICopy:
         return best_move
 
     def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player):
-        """Recursive minimax algorithm function, with alpha beta pruning.
-
-        Args:
-            depth (int): The depth to which the minimax algorithm searches game states
-            turn (int): 1 or 2, depending on whose turn it is. If ai_play == turn, it is the maximising (AI) player's turn
-            alpha, beta (float): Alpha -beta pruning values
-            prev_move (int): The previous move made
-            move_count (int): The number of moves made in the game so far
-            ai_player (int): Whether the AI is playing player 1 or 2 in this game
-
-
-        Returns:
-            value, best_move : The best move (int representing a column) and game state value belonging to that move
-        """
 
         if self.board.check_four_connected():  # win
             if turn != ai_player:
@@ -354,14 +289,83 @@ class AICopy:
             beta = min(beta, value)
 
         return min_value, best_move
+    
+    def simple_next_move(self, ai_player, move_count):
+        
+        max_score = VERY_SMALL_NUMBER
+        best_move = 3
+        depth = 5
+
+        for move in self.get_possible_moves():
+
+            self.board.make_move(move, ai_player)
+            move_count += 1
+
+            turn = 2 if ai_player == 1 else 1
+
+            minimax = self.simple_minimax(
+                depth, turn, move, move_count, ai_player)
+            score = minimax[0]
+
+            if score > max_score:
+                max_score = score
+                best_move = move
+
+            self.board.undo_move(move)
+            move_count -= 1
+
+        return best_move
+    
+    def simple_minimax(self, depth: int, turn: int, prev_move, move_count, ai_player):
+
+        if self.board.check_four_connected():  # win
+            if turn != ai_player:
+                return 1000000 + depth, prev_move
+            return -1000000 - depth, prev_move
+
+        if move_count == 42:  # draw
+            return 0, prev_move
+
+        if depth == 0:
+            score = self.evaluate_board(ai_player)
+            return score, prev_move
+
+        if turn == ai_player:
+            max_value = VERY_SMALL_NUMBER
+            for move in self.get_possible_moves():
+                self.board.make_move(move, turn)
+                move_count += 1
+
+                value, _ = self.simple_minimax(
+                    depth-1, 3-turn, move, move_count, ai_player)
+
+                self.board.undo_move(move)
+                move_count -= 1
+
+                if value > max_value:
+                    max_value = value
+                    best_move = move
+
+            return max_value, best_move
+
+        min_value = VERY_LARGE_NUMBER
+        for move in self.get_possible_moves():
+            self.board.make_move(move, turn)
+            move_count += 1
+
+            value, _ = self.simple_minimax(
+                depth-1, 3-turn, move, move_count, ai_player)
+
+            self.board.undo_move(move)
+            move_count -= 1
+
+            if value < min_value:
+                min_value = value
+                best_move = move
+
+        return min_value, best_move
 
     def get_possible_moves(self):
-        """Finds all columns into which valid moves can be made at
-        the current point in the game.
-
-        Returns:
-            moves: A set of possible columns
-        """
         moves = []
         ideal_move_order = [3, 2, 4, 1, 5, 0, 6]
 
@@ -376,17 +380,6 @@ class AICopy:
         return sorted_moves
 
     def _evaluate_window(self, window):
-        """Part of the heuristic evaluation of the board state
-        Assigns points depending on how many pieces each player has
-        in the vicinity of four squares.
-
-        Args:
-            window: A section of the game board (horizontal, vertical or diagonal)
-
-        Returns:
-            score (int): The score assigned for the window.
-        """
-
         score = 0
         if window.count(1) == 4:
             score += 10000
@@ -405,12 +398,6 @@ class AICopy:
         return score
 
     def evaluate_board(self, ai_player):
-        """Main heuristic evaluation function. Splits the game board into window sections 
-        to be evaluated by the _evaluate_window function.
-
-        Returns:
-            score (int): The overall heuristic score of the position for the current player.
-        """
         score = 0
         # Check horizontal
         for row in range(6):
@@ -492,3 +479,12 @@ if __name__ == "__main__":
     total_time = end_time - start_time
     print(total_time)
     print("")
+
+    print("Timing minimax without alpha beta pruning")
+    start_time = time.time()
+    move = ai.simple_next_move(ai_player, move_count)
+    end_time = time.time()
+    total_time = end_time - start_time
+    print(total_time)
+    print("")
+
