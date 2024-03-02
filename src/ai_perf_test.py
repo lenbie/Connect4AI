@@ -7,22 +7,31 @@ VERY_SMALL_NUMBER = -math.inf
 
 
 class AICopy:
-    def __init__(self, board: Board):
+    """Class for performance testing the AI class, specifically different
+    levels of optimization for the minimax and next_move functions.
+    See the original AI class in ai.py for more docstring comments.
+
+    Run this file to get the performance testing outputs.
+    """
+    def __init__(self, board: Board, depth: int):
         """Class constructor
 
         Args:
             board (Board): The game board
         """
         self.board = board
+        self.depth = depth
     
     def next_move_caching(self, ai_player, move_count):
-
+        """Next move with caching, iterative deepening and alpha-beta pruning,
+        this is the current state of the original AI class.
+        """
 
         max_score = VERY_SMALL_NUMBER  # alpha
         min_score = VERY_LARGE_NUMBER  # beta
 
         best_move = 3
-        max_depth = 5
+        max_depth = self.depth
 
         move_time = 5
 
@@ -64,6 +73,8 @@ class AICopy:
         return best_move
 
     def minimax_caching(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player, cache):
+        """ Minimax with caching and alpha-beta pruning. The current state of the AI class.
+        """
 
         state = tuple(map(tuple, self.board.board))
         cache_key = (state, turn) 
@@ -132,69 +143,15 @@ class AICopy:
 
         return min_value, best_move
 
-    def next_move_no_alpha_updates(self, ai_player, move_count):
-
-        max_score = alpha = VERY_SMALL_NUMBER
-        beta = VERY_LARGE_NUMBER
-
-        best_move = 3
-        depth = 5
-
-        for move in self.get_possible_moves():
-
-            self.board.make_move(move, ai_player)
-            move_count += 1
-
-            turn = 2 if ai_player == 1 else 1
-
-            minimax = self.minimax(
-                depth, turn, alpha, beta, move, move_count, ai_player)
-            score = minimax[0]
-
-            if score > max_score:
-                max_score = score
-                best_move = move
-
-            self.board.undo_move(move)
-            move_count -= 1
-
-        return best_move
-
-    def next_move_alpha_updates(self, ai_player, move_count):
-
-        max_score = VERY_SMALL_NUMBER
-        min_score = VERY_LARGE_NUMBER
-
-        best_move = 3
-        depth = 5
-
-        for move in self.get_possible_moves():
-
-            self.board.make_move(move, ai_player)
-            move_count += 1
-
-            turn = 2 if ai_player == 1 else 1
-
-            minimax = self.minimax(
-                depth, turn, max_score, min_score, move, move_count, ai_player)
-            score = minimax[0]
-
-            if score > max_score:
-                max_score = score
-                best_move = move
-
-            self.board.undo_move(move)
-            move_count -= 1
-
-        return best_move
-
     def next_move_iterative_deepening(self, ai_player, move_count):
-
+        """Next_move with iterative deepening and alpha-beta pruning, 
+        but no caching.
+        """
         max_score = VERY_SMALL_NUMBER  # alpha
         min_score = VERY_LARGE_NUMBER  # beta
 
         best_move = 3
-        max_depth = 5
+        max_depth = self.depth
 
         start_time = time.time()
         move_time = 5
@@ -231,8 +188,71 @@ class AICopy:
                 move_count -= 1
 
         return best_move
+    
+    def next_move_alpha_updates(self, ai_player, move_count):
+        """Next_move with alpha-beta pruning (max_score updated every iteration)
+        """
+        max_score = VERY_SMALL_NUMBER
+        min_score = VERY_LARGE_NUMBER
+
+        best_move = 3
+        depth = self.depth
+
+        for move in self.get_possible_moves():
+
+            self.board.make_move(move, ai_player)
+            move_count += 1
+
+            turn = 2 if ai_player == 1 else 1
+
+            minimax = self.minimax(
+                depth, turn, max_score, min_score, move, move_count, ai_player)
+            score = minimax[0]
+
+            if score > max_score:
+                max_score = score
+                best_move = move
+
+            self.board.undo_move(move)
+            move_count -= 1
+
+        return best_move
+    
+    def next_move_no_alpha_updates(self, ai_player, move_count):
+        """Next_move without updating alpha (max_score)
+        in this function.
+        """
+
+        max_score = alpha = VERY_SMALL_NUMBER
+        beta = VERY_LARGE_NUMBER
+
+        best_move = 3
+        depth = self.depth
+
+        for move in self.get_possible_moves():
+
+            self.board.make_move(move, ai_player)
+            move_count += 1
+
+            turn = 2 if ai_player == 1 else 1
+
+            minimax = self.minimax(
+                depth, turn, alpha, beta, move, move_count, ai_player)
+            score = minimax[0]
+
+            if score > max_score:
+                max_score = score
+                best_move = move
+
+            self.board.undo_move(move)
+            move_count -= 1
+
+        return best_move
 
     def minimax(self, depth: int, turn: int, alpha, beta, prev_move, move_count, ai_player):
+        """Minimax with alpha beta pruning, no caching.
+        Used for the above three next_move functions.
+        """
 
         if self.board.check_four_connected():  # win
             if turn != ai_player:
@@ -291,10 +311,12 @@ class AICopy:
         return min_value, best_move
     
     def simple_next_move(self, ai_player, move_count):
+        """Next move without alpha-beta pruning.
+        """
         
         max_score = VERY_SMALL_NUMBER
         best_move = 3
-        depth = 5
+        depth = self.depth
 
         for move in self.get_possible_moves():
 
@@ -317,6 +339,8 @@ class AICopy:
         return best_move
     
     def simple_minimax(self, depth: int, turn: int, prev_move, move_count, ai_player):
+        """Minimax without alpha-beta pruning.
+        """
 
         if self.board.check_four_connected():  # win
             if turn != ai_player:
@@ -365,6 +389,10 @@ class AICopy:
 
         return min_value, best_move
 
+    """The functions below are copies from the AI class.
+    Refer to the AI class for documentation.
+    """
+
     def get_possible_moves(self):
         moves = []
         ideal_move_order = [3, 2, 4, 1, 5, 0, 6]
@@ -381,15 +409,12 @@ class AICopy:
 
     def _evaluate_window(self, window):
         score = 0
-        if window.count(1) == 4:
-            score += 10000
+
         if window.count(1) == 3 and window.count(0) == 1:
             score += 100
         if window.count(1) == 2 and window.count(0) == 2:
             score += 10
 
-        if window.count(2) == 4:
-            score -= 10000
         if window.count(2) == 3 and window.count(0) == 1:
             score -= 100
         if window.count(2) == 2 and window.count(0) == 2:
@@ -434,8 +459,12 @@ class AICopy:
 
 if __name__ == "__main__":
     test_board = Board()
-    ai = AICopy(test_board)
+    
+    #Set the desired depth here
+    depth = 4
 
+    ai = AICopy(test_board, depth)
+    
     test_board.make_move(3, 1)
     test_board.make_move(3, 2)
     test_board.make_move(2, 1)
@@ -445,7 +474,7 @@ if __name__ == "__main__":
     move_count = 5
     ai_player = 2
 
-    print("Depth 5\n")
+    print(f"Depth {ai.depth}\n")
 
     print ("Timing iterative deepening with caching")
     start_time = time.time()

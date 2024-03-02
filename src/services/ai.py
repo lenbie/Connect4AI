@@ -30,9 +30,9 @@ class AI:
         min_score = VERY_LARGE_NUMBER  # beta
 
         best_move = 3
-        max_depth = 5
+        max_depth = 6
 
-        move_time = 2
+        move_time = 5
 
         cache = {}
 
@@ -82,7 +82,7 @@ class AI:
             prev_move (int): The previous move made
             move_count (int): The number of moves made in the game so far
             ai_player (int): Whether the AI is playing player 1 or 2 in this game
-
+            cache (dict): Cache for storing board states and the associated best move per player
 
         Returns:
             value, best_move : The best move (int representing a column)
@@ -189,15 +189,15 @@ class AI:
         """
 
         score = 0
-        if window.count(1) == 4:
-            score += 10000
+        #if window.count(1) == 4:
+        #    score += 10000
         if window.count(1) == 3 and window.count(0) == 1:
             score += 100
         if window.count(1) == 2 and window.count(0) == 2:
             score += 10
 
-        if window.count(2) == 4:
-            score -= 10000
+        #if window.count(2) == 4:
+        #    score -= 10000
         if window.count(2) == 3 and window.count(0) == 1:
             score -= 100
         if window.count(2) == 2 and window.count(0) == 2:
