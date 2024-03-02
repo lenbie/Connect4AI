@@ -89,7 +89,7 @@ class AI:
                                 and game state value belonging to that move
         """
         state = tuple(map(tuple, self.board.board))
-        cache_key = (state, turn, depth)
+        cache_key = (state, turn, depth) 
 
         if self.board.check_four_connected():  # win
             if turn != ai_player:
@@ -105,9 +105,11 @@ class AI:
 
         moves = self.get_possible_moves()
         if cache_key in cache:
-            moves.remove(cache_key[1])
-            moves.insert(0, cache_key[1])
+            moves.remove(cache[cache_key][1])
+            moves.insert(0, cache[cache_key][1])
 
+        #if depth in cached thing is >= we can return score immediately (maybe some alpha beta pruning optimization)
+        
         if turn == ai_player:
             max_value = VERY_SMALL_NUMBER
             for move in moves:
