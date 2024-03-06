@@ -119,7 +119,7 @@ class Game:
         choice = False
         while not choice:
             col = (
-                input("\nInto which column from 0 to 6 do you want to make a move?  "))
+                input("\nInto which column from 0 (left) to 6 (right) do you want to make a move?  "))
             try:
                 number = int(col)
                 if self.board.check_valid_move(number):

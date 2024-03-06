@@ -108,8 +108,8 @@ class AI:
             moves.remove(cache[cache_key][1])
             moves.insert(0, cache[cache_key][1])
 
-        #if depth in cached thing is >= we can return score immediately (maybe some alpha beta pruning optimization)
-        
+        # if depth in cached thing is >= we can return score immediately (maybe some alpha beta pruning optimization)
+
         if turn == ai_player:
             max_value = VERY_SMALL_NUMBER
             for move in moves:
@@ -189,14 +189,14 @@ class AI:
         """
 
         score = 0
-        #if window.count(1) == 4:
+        # if window.count(1) == 4:
         #    score += 10000
         if window.count(1) == 3 and window.count(0) == 1:
             score += 100
         if window.count(1) == 2 and window.count(0) == 2:
             score += 10
 
-        #if window.count(2) == 4:
+        # if window.count(2) == 4:
         #    score -= 10000
         if window.count(2) == 3 and window.count(0) == 1:
             score -= 100

@@ -13,6 +13,7 @@ class AICopy:
 
     Run this file to get the performance testing outputs.
     """
+
     def __init__(self, board: Board, depth: int):
         """Class constructor
 
@@ -21,7 +22,7 @@ class AICopy:
         """
         self.board = board
         self.depth = depth
-    
+
     def next_move_caching(self, ai_player, move_count):
         """Next move with caching, iterative deepening and alpha-beta pruning,
         this is the current state of the original AI class.
@@ -77,7 +78,7 @@ class AICopy:
         """
 
         state = tuple(map(tuple, self.board.board))
-        cache_key = (state, turn) 
+        cache_key = (state, turn)
 
         if self.board.check_four_connected():  # win
             if turn != ai_player:
@@ -96,8 +97,8 @@ class AICopy:
             moves.remove(cache[cache_key][1])
             moves.insert(0, cache[cache_key][1])
 
-        #if depth in cached thing is >= we can return score immediately (maybe some alpha beta pruning optimization)
-        
+        # if depth in cached thing is >= we can return score immediately (maybe some alpha beta pruning optimization)
+
         if turn == ai_player:
             max_value = VERY_SMALL_NUMBER
             for move in moves:
@@ -188,7 +189,7 @@ class AICopy:
                 move_count -= 1
 
         return best_move
-    
+
     def next_move_alpha_updates(self, ai_player, move_count):
         """Next_move with alpha-beta pruning (max_score updated every iteration)
         """
@@ -217,7 +218,7 @@ class AICopy:
             move_count -= 1
 
         return best_move
-    
+
     def next_move_no_alpha_updates(self, ai_player, move_count):
         """Next_move without updating alpha (max_score)
         in this function.
@@ -309,11 +310,11 @@ class AICopy:
             beta = min(beta, value)
 
         return min_value, best_move
-    
+
     def simple_next_move(self, ai_player, move_count):
         """Next move without alpha-beta pruning.
         """
-        
+
         max_score = VERY_SMALL_NUMBER
         best_move = 3
         depth = self.depth
@@ -337,7 +338,7 @@ class AICopy:
             move_count -= 1
 
         return best_move
-    
+
     def simple_minimax(self, depth: int, turn: int, prev_move, move_count, ai_player):
         """Minimax without alpha-beta pruning.
         """
@@ -459,12 +460,12 @@ class AICopy:
 
 if __name__ == "__main__":
     test_board = Board()
-    
-    #Set the desired depth here
+
+    # Set the desired depth here
     depth = 4
 
     ai = AICopy(test_board, depth)
-    
+
     test_board.make_move(3, 1)
     test_board.make_move(3, 2)
     test_board.make_move(2, 1)
@@ -476,14 +477,13 @@ if __name__ == "__main__":
 
     print(f"Depth {ai.depth}\n")
 
-    print ("Timing iterative deepening with caching")
+    print("Timing iterative deepening with caching")
     start_time = time.time()
     move = ai.next_move_caching(ai_player, move_count)
     end_time = time.time()
     total_time = end_time - start_time
     print(total_time)
     print("")
-
 
     print("Timing iterative deepening no caching")
     start_time = time.time()
@@ -516,4 +516,3 @@ if __name__ == "__main__":
     total_time = end_time - start_time
     print(total_time)
     print("")
-

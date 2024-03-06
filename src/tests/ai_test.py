@@ -92,6 +92,21 @@ class TestAI(unittest.TestCase):
 
         self.assertEqual(moves, [3, 2, 4, 1, 0, 6])
 
+    def test_move_sorting_all_full(self):
+        test_board.clear_board()
+
+        test_board.board = [
+            [1, 2, 1, 2, 1, 2, 1],
+            [2, 1, 2, 1, 2, 1, 2],
+            [1, 1, 2, 1, 2, 1, 2],
+            [2, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1],
+            [2, 1, 2, 1, 2, 1, 2]]
+
+        moves = self.ai.get_possible_moves()
+
+        self.assertEqual(moves, [])
+
     def test_cache_entries(self):
         test_board.clear_board()
         test_board.make_move(3, 1)
