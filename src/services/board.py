@@ -192,8 +192,18 @@ class Board:
         return True
 
     def _check_diag_whole_board(self):
-        """Checks if there are four connected of any player
-        in any diagonal of the board.
+        """Checks if there are four connected of any player in any diagonal of the board.
+
+        First, iterates through the first three rows and first four columns of the board,
+        and checks from each square whether there are four connected in a right downward diagonal
+        (in the direction of greater rows and greater columns) starting from the square.
+        We can stop after the first three rows and four columns, because in any later column or row,
+        there are no longer three more squares in the right downward diagonal.
+
+        Then, starts from the bottom left corner of the board, repeating the above process but going
+        up the last three rows, and checking right upward diagnoals
+        (rows get smaller, columns larger).
+        The same note about not needing to check all rows and columns applies.
 
         Returns:
             True, if there are four connected.

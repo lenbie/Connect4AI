@@ -7,6 +7,7 @@ from services.board import Board
 WIDTH = 7
 HEIGHT = 6
 
+
 class TestBoard(unittest.TestCase):
     def setUp(self):
         self.testboard = Board()
@@ -43,7 +44,7 @@ class TestBoard(unittest.TestCase):
         invalid_move = self.testboard.check_valid_move(3)
 
         self.assertEqual(invalid_move, False)
-    
+
     def test_invalid_move_col_num(self):
         """Tests whether check_valid_move returns False
         if a column number outside the range from 0 to 6 is given.
@@ -53,7 +54,7 @@ class TestBoard(unittest.TestCase):
         invalid_move = self.testboard.check_valid_move(7)
 
         self.assertEqual(invalid_move, False)
-    
+
     def test_check_square_content(self):
         """Tests that the _check_square_content function returns the correct content of the square.
         """
@@ -72,9 +73,10 @@ class TestBoard(unittest.TestCase):
 
         self.testboard.make_move(column_index, player)
 
-        row_index = 5 #Since the board is empty before the move was made, the token is dropped to the bottom row
+        row_index = 5  # Since the board is empty before the move was made, the token is dropped to the bottom row
 
-        square_content = self.testboard._check_square_content(row_index, column_index)
+        square_content = self.testboard._check_square_content(
+            row_index, column_index)
 
         self.assertEqual(square_content, 1)
 
@@ -112,7 +114,7 @@ class TestBoard(unittest.TestCase):
         """
         self.testboard.clear_board()
 
-        column_index = 7 #invalid column
+        column_index = 7  # invalid column
         player = 1
         move = self.testboard.make_move(column_index, player)
 
@@ -124,7 +126,7 @@ class TestBoard(unittest.TestCase):
         self.testboard.clear_board()
 
         player = 1
-        column_index = 7 #invalid column
+        column_index = 7  # invalid column
 
         correctboard = [[0 for i in range(7)] for j in range(6)]
 
@@ -146,12 +148,12 @@ class TestBoard(unittest.TestCase):
             [2, 2, 1, 2, 1, 2, 1],
             [1, 2, 1, 2, 1, 2, 1],
             [2, 1, 2, 1, 2, 1, 2]]
-        
+
         self.testboard.board = check_board
-        
+
         column_index = 0
         player = 2
-        #Tests that the top left square does not change content
+        # Tests that the top left square does not change content
         self.testboard.make_move(column_index, player)
 
         self.assertEqual(self.testboard.board, check_board)
@@ -194,7 +196,7 @@ class TestBoard(unittest.TestCase):
         row_index = self.testboard._check_highest_square(3)
 
         self.assertEqual(None, row_index)
-    
+
     def test_undo_move_full_col(self):
         """Tests that undo_move sets the top square in the given column to 0
         """
@@ -212,7 +214,7 @@ class TestBoard(unittest.TestCase):
 
         square_content = self.testboard.board[0][column]
         self.assertEqual(square_content, 0)
-    
+
     def test_undo_move_non_full_col(self):
         """Tests that undo_move sets the highest taken square in the col to 0
         """
@@ -222,13 +224,13 @@ class TestBoard(unittest.TestCase):
         self.testboard.board[5][column] = 1
         self.testboard.board[4][column] = 1
         self.testboard.board[3][column] = 1
-        #Highest taken square is row 3 column 3
+        # Highest taken square is row 3 column 3
 
         self.testboard.undo_move(column)
 
         square_content = self.testboard.board[3][column]
         self.assertEqual(square_content, 0)
-        
+
     def test_check_row_win(self):
         """Tests if the _check_row function returns True if there are 
         four connected from the given index
@@ -240,7 +242,7 @@ class TestBoard(unittest.TestCase):
         self.testboard.make_move(4, 1)
         self.testboard.make_move(5, 1)
 
-        row_index = 5 #bottom row
+        row_index = 5  # bottom row
         col_index = 2
 
         win = self.testboard._check_row(row_index, col_index)
@@ -258,7 +260,7 @@ class TestBoard(unittest.TestCase):
         self.testboard.make_move(4, 2)
         self.testboard.make_move(5, 2)
 
-        row_index = 5 #bottom row
+        row_index = 5  # bottom row
         col_index = 2
 
         win = self.testboard._check_row(row_index, col_index)
@@ -271,12 +273,12 @@ class TestBoard(unittest.TestCase):
         self.testboard.clear_board()
 
         self.testboard.board = [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 2, 0],
-        [0, 0, 0, 1, 2, 1, 0],
-        [2, 2, 2, 2, 1, 1, 0],
-        [1, 1, 2, 2, 1, 1, 0]]
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 2, 0],
+            [0, 0, 0, 1, 2, 1, 0],
+            [2, 2, 2, 2, 1, 1, 0],
+            [1, 1, 2, 2, 1, 1, 0]]
 
         win = self.testboard._check_all_rows()
 
@@ -288,34 +290,34 @@ class TestBoard(unittest.TestCase):
         self.testboard.clear_board()
 
         self.testboard.board = [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0, 1, 0],
-        [0, 0, 2, 1, 1, 1, 1],
-        [0, 0, 2, 1, 2, 2, 2],
-        [0, 0, 2, 2, 2, 1, 1]]
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0],
+            [0, 0, 2, 1, 1, 1, 1],
+            [0, 0, 2, 1, 2, 2, 2],
+            [0, 0, 2, 2, 2, 1, 1]]
 
         win = self.testboard._check_all_rows()
 
         self.assertEqual(win, True)
-    
+
     def test_check_all_rows_no_win(self):
         """Tests if _check_all_rows returns False if no player has a win
         """
         self.testboard.clear_board()
 
         self.testboard.board = [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0, 1, 0],
-        [0, 0, 1, 2, 1, 2, 2],
-        [0, 0, 2, 2, 1, 1, 2],
-        [0, 0, 2, 2, 1, 1, 1]]
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0],
+            [0, 0, 1, 2, 1, 2, 2],
+            [0, 0, 2, 2, 1, 1, 2],
+            [0, 0, 2, 2, 1, 1, 1]]
 
         win = self.testboard._check_all_rows()
 
         self.assertEqual(win, False)
-    
+
     def test_check_four_connected_row_win(self):
         """Tests if the check_four_connected function returns True if any player has 
         4 connected in any row.
@@ -323,12 +325,12 @@ class TestBoard(unittest.TestCase):
         self.testboard.clear_board()
 
         self.testboard.board = [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0, 1, 0],
-        [0, 0, 2, 1, 1, 1, 1],
-        [0, 0, 2, 1, 2, 2, 2],
-        [0, 0, 2, 2, 2, 1, 1]]
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0],
+            [0, 0, 2, 1, 1, 1, 1],
+            [0, 0, 2, 1, 2, 2, 2],
+            [0, 0, 2, 2, 2, 1, 1]]
 
         win = self.testboard.check_four_connected()
 
@@ -346,7 +348,7 @@ class TestBoard(unittest.TestCase):
         self.testboard.make_move(col, 1)
         self.testboard.make_move(col, 1)
 
-        row = 2 #since 4 rows filled from bottom up, and the search goes from top to bottom
+        row = 2  # since 4 rows filled from bottom up, and the search goes from top to bottom
         win = self.testboard._check_col(row, col)
 
         self.assertEqual(win, True)
@@ -363,11 +365,11 @@ class TestBoard(unittest.TestCase):
         self.testboard.make_move(col, 2)
         self.testboard.make_move(col, 2)
 
-        row = 2 #since 4 rows filled from bottom up, and the search goes from top to bottom
+        row = 2  # since 4 rows filled from bottom up, and the search goes from top to bottom
 
         win = self.testboard._check_col(row, col)
         self.assertEqual(win, False)
-    
+
     def test_check_all_cols_no_win(self):
         """Tests that the _check_all_cols function returns False
         if no player has four connected in any column
@@ -375,17 +377,17 @@ class TestBoard(unittest.TestCase):
         self.testboard.clear_board()
 
         self.testboard.board = [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0, 1, 0],
-        [0, 0, 2, 1, 2, 1, 1],
-        [0, 0, 2, 1, 2, 2, 2],
-        [0, 0, 2, 2, 2, 1, 1]]
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0],
+            [0, 0, 2, 1, 2, 1, 1],
+            [0, 0, 2, 1, 2, 2, 2],
+            [0, 0, 2, 2, 2, 1, 1]]
 
         win = self.testboard._check_all_cols()
 
         self.assertEqual(win, False)
-    
+
     def test_check_all_cols_win_case1(self):
         """Tests that the _check_all_cols function returns True
         if a player has four connected in any column 
@@ -393,17 +395,17 @@ class TestBoard(unittest.TestCase):
         self.testboard.clear_board()
 
         self.testboard.board = [
-        [0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0],
-        [1, 0, 1, 0, 2, 0, 0],
-        [1, 0, 2, 1, 2, 0, 0],
-        [1, 0, 2, 1, 1, 2, 2],
-        [2, 1, 2, 2, 2, 1, 1]]
+            [0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 2, 0, 0],
+            [1, 0, 2, 1, 2, 0, 0],
+            [1, 0, 2, 1, 1, 2, 2],
+            [2, 1, 2, 2, 2, 1, 1]]
 
         win = self.testboard._check_all_cols()
 
         self.assertEqual(win, True)
-    
+
     def test_check_all_cols_win_case2(self):
         """Tests that the _check_all_cols function returns True
         if a player has four connected in any column 
@@ -411,12 +413,12 @@ class TestBoard(unittest.TestCase):
         self.testboard.clear_board()
 
         self.testboard.board = [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0, 0, 2],
-        [2, 0, 2, 1, 0, 0, 2],
-        [1, 1, 2, 1, 0, 0, 2],
-        [1, 1, 1, 2, 2, 1, 2]]
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 2],
+            [2, 0, 2, 1, 0, 0, 2],
+            [1, 1, 2, 1, 0, 0, 2],
+            [1, 1, 1, 2, 2, 1, 2]]
 
         win = self.testboard._check_all_cols()
 
@@ -429,51 +431,178 @@ class TestBoard(unittest.TestCase):
         self.testboard.clear_board()
 
         self.testboard.board = [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0, 0, 2],
-        [2, 0, 2, 1, 0, 0, 2],
-        [1, 1, 2, 1, 0, 0, 2],
-        [1, 1, 1, 2, 2, 1, 2]]
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 2],
+            [2, 0, 2, 1, 0, 0, 2],
+            [1, 1, 2, 1, 0, 0, 2],
+            [1, 1, 1, 2, 2, 1, 2]]
 
         win = self.testboard.check_four_connected()
 
         self.assertEqual(win, True)
-    
-#DIAGNOALS
 
-    def test_check_right_up_diagonal(self):
+    def test_check_right_up_diagonal_win(self):
+        """Tests that _check_right_up_diagonal returns True if win.
+        """
         self.testboard.clear_board()
 
-        self.testboard.make_move(1, 1)
-        self.testboard.make_move(2, 2)
-        self.testboard.make_move(2, 1)
-        self.testboard.make_move(2, 1)
-        self.testboard.make_move(1, 1)
-        self.testboard.make_move(3, 1)
-        self.testboard.make_move(3, 1)
-        self.testboard.make_move(3, 2)
-        self.testboard.make_move(0, 1)
-        self.testboard.make_move(3, 1)
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 2, 1, 2, 0, 0],
+            [0, 2, 1, 2, 1, 0, 0],
+            [0, 1, 2, 1, 1, 2, 0]]
+
+        row = 5
+        col = 1
+
+        win = self.testboard._check_right_up_diagonals(row, col)
+        self.assertEqual(win, True)
+
+    def test_check_right_up_diagonal_edge_win(self):
+        """Tests that _check_right_up_diagonal returns True if win.
+        """
+        self.testboard.clear_board()
+
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 2],
+            [0, 0, 0, 0, 0, 2, 1],
+            [0, 0, 0, 0, 2, 2, 1],
+            [0, 0, 2, 2, 1, 1, 1],
+            [0, 2, 1, 2, 2, 1, 2],
+            [0, 2, 2, 1, 1, 2, 1]]
+
+        row = 3
+        col = 3
+
+        win = self.testboard._check_right_up_diagonals(row, col)
+        self.assertEqual(win, True)
+
+    def test_check_right_up_diagonal_no_win(self):
+        """Tests that _check_right_up_diagonal returns False if no win.
+        """
+        self.testboard.clear_board()
+
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 2, 1, 2, 0, 0],
+            [0, 2, 2, 2, 1, 0, 0],
+            [0, 1, 2, 1, 1, 1, 0]]
+
+        row = 5
+        col = 1
+
+        win = self.testboard._check_right_up_diagonals(row, col)
+        self.assertEqual(win, False)
+
+    def test_check_right_down_diagonal_win(self):
+        """Tests that _check_right_down_diagonals returns True if win.
+        """
+        self.testboard.clear_board()
+
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1, 0, 0],
+            [0, 0, 2, 2, 1, 0, 0],
+            [0, 0, 2, 2, 2, 1, 0],
+            [0, 1, 2, 1, 1, 2, 1]]
+
+        row = 2
+        col = 3
+
+        win = self.testboard._check_right_down_diagonals(row, col)
+        self.assertEqual(win, True)
+
+    def test_check_right_down_diagonal_no_win(self):
+        """Tests that _check_right_down_diagonals returns False if no win.
+        """
+        self.testboard.clear_board()
+
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0],
+            [0, 0, 2, 2, 1, 0, 0],
+            [0, 0, 2, 2, 2, 1, 0],
+            [0, 1, 2, 1, 1, 2, 1]]
+
+        row = 2
+        col = 3
+
+        win = self.testboard._check_right_down_diagonals(row, col)
+        self.assertEqual(win, False)
+
+    def test_check_diag_whole_board_right_up_win(self):
+        """Tests that _check_diag_whole_board returns True if there 
+        is four connected in a right upper diagonal
+        """
+        self.testboard.clear_board()
+
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 2, 1, 2, 0, 0],
+            [0, 2, 1, 2, 1, 0, 0],
+            [0, 1, 2, 1, 1, 2, 0]]
 
         win = self.testboard._check_diag_whole_board()
-        self.assertEqual(win, 1)
+        self.assertEqual(win, True)
 
-    def test_check_right_down_diagonal(self):
+    def test_check_diag_whole_board_right_down_win(self):
+        """Tests that _check_diag_whole_board returns True if there 
+        is four connected in a right downward diagonal
+        """
         self.testboard.clear_board()
 
-        self.testboard.make_move(1, 1)
-        self.testboard.make_move(2, 2)
-        self.testboard.make_move(2, 1)
-        self.testboard.make_move(2, 1)
-        self.testboard.make_move(1, 1)
-        self.testboard.make_move(3, 1)
-        self.testboard.make_move(3, 1)
-        self.testboard.make_move(1, 2)
-        self.testboard.make_move(1, 1)
-        self.testboard.make_move(4, 1)
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0],
+            [0, 0, 2, 1, 2, 0, 0],
+            [0, 2, 2, 2, 1, 0, 0],
+            [0, 1, 2, 1, 1, 1, 0]]
 
-        win = self.testboard._check_right_down_diagonals(2, 1)
+        win = self.testboard._check_diag_whole_board()
+        self.assertEqual(win, True)
+
+    def test_check_diag_whole_board_no_win(self):
+        """Tests that _check_diag_whole_board returns False if there 
+        are no four connected on a diagnoal.
+        """
+        self.testboard.clear_board()
+
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 2, 2, 2, 0, 0],
+            [0, 2, 1, 2, 1, 0, 0],
+            [0, 1, 2, 1, 1, 1, 0]]
+
+        win = self.testboard._check_diag_whole_board()
+        self.assertEqual(win, False)
+
+    def test_four_connected_diag_win(self):
+        """Tests that check_four_connected returns True if a player
+        has won on a diagonal
+        """
+        self.testboard.clear_board()
+
+        self.testboard.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 2, 1, 2, 0, 0],
+            [0, 2, 1, 2, 1, 0, 0],
+            [0, 1, 2, 1, 1, 2, 0]]
+
+        win = self.testboard.check_four_connected()
         self.assertEqual(win, True)
 
     def test_check_four_connected_no_win_draw(self):
@@ -488,12 +617,11 @@ class TestBoard(unittest.TestCase):
             [1, 1, 2, 1, 2, 1, 2],
             [2, 2, 1, 2, 1, 2, 1],
             [1, 2, 1, 2, 1, 2, 1],
-            [2, 1, 2, 1, 2, 1, 2]] 
-        #Draw board
+            [2, 1, 2, 1, 2, 1, 2]]
 
         win = self.testboard.check_four_connected()
         self.assertEqual(win, False)
-    
+
     def test_check_four_connected_no_win_yet(self):
         """Tests if check_four_connected returns False
         if neither player has a win on the board yet.
@@ -507,6 +635,6 @@ class TestBoard(unittest.TestCase):
             [0, 0, 1, 2, 1, 2, 2],
             [0, 0, 2, 2, 1, 1, 2],
             [0, 0, 2, 2, 1, 1, 1]]
-            
+
         win = self.testboard.check_four_connected()
         self.assertEqual(win, False)
