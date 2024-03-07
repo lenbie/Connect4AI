@@ -37,3 +37,5 @@ Upon implementing iterative deepening without caching, the algorithm was slightl
 ## Manual Testing
 
 Manual tests have been done through running classes indpendently with scenarios I created (e.g. making moves and testing the response at a certain point in the game). Also, debugging print statements were used a lot, especially to verify the minimax algorithm returns the correct evaluation scores, specifically in win/loss situations upon the next move. Moreover, I played the game a lot as both players to test the AI's responses, and game play itself.
+
+- Also tested faulty inputs.

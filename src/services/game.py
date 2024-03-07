@@ -53,6 +53,7 @@ class Game:
                     move_count += 1
                     self._check_draw(move_count)
 
+        #Determining winner, progressing to game end or next game
         if self._winner == 1:
             colour = "🟡"
         if self._winner == 2:
@@ -61,14 +62,18 @@ class Game:
         self._play_again()
 
     def _play_again(self):
-        again = input("\nDo you want to play again? Please type YES or NO: ")
+        """Manages the possibility to play again, asks for player choice
+        and resets global variables.
+        """
+        again = input("\nPlease type YES to play again: ")
         if again.lower() == "yes":
             self._win = False
             self._winner = None
             self.play_game()
 
     def _check_win(self, player):
-        """Checks if someone has won the game yet.
+        """Checks if someone has won the game yet, 
+        and sets global variables appropriately.
 
         Args:
             player: The current player (human or AI player)
@@ -79,14 +84,10 @@ class Game:
             self._winner = player
 
     def _check_draw(self, move_count):
-        """Checks if a draw has occurred.
+        """Checks if a draw has occurred and calls the _play_again function
 
         Args:
             move_count (int): The number of moves played so far.
-
-        Returns:
-            True, if a draw has occurred - the board is full but no one has won
-            False, otherwise
         """
 
         if move_count == 42 and not self._win:
@@ -111,6 +112,7 @@ class Game:
 
     def _player_move(self):
         """Manages the human player making moves via asking for input.
+        This includes re-prompting upon invalid input, making the move, and checking for win.
         Prints the board once a move has been made.
         """
 
@@ -118,8 +120,8 @@ class Game:
 
         choice = False
         while not choice:
-            col = (
-                input("\nInto which column from 0 (left) to 6 (right) do you want to make a move?  "))
+            col = (input(
+            """\nInto which column from 0 (left) to 6(right) do you want to make a move?  """))
             try:
                 number = int(col)
                 if self.board.check_valid_move(number):
