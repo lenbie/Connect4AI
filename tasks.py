@@ -6,8 +6,8 @@ def start(ctx):
 
 @task
 def performance_test(ctx):
-    ctx.run("python3 src/main.py", pty = True)
-    
+    ctx.run("python3 src/ai_perf_test.py", pty = True)
+
 @task
 def test(ctx):
     ctx.run("pytest src", pty = True)

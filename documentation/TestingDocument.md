@@ -28,9 +28,15 @@ As of 24.02., there are 15 tests. More test for the AI class in particular, but 
 
 Performance testing of the AI class - the minimax and different optimization - was done in the ai_perf_test.py file found in src. A copy of the AI class was created, and different versions of next_move and minimax, representing the different optimizations were added. Running the file prints out the speed of running next_move at each of these optimization levels, starting from the same game state and with the same depth. The depth can be manually set at the bottom of the file.
 
+Performance tests can also be run using:
+
+```bash
+poetry run invoke performance-test
+```
+
 This found that simple minimax was by far the slowest, then minimax with alpha-beta pruning, but no alpha updates in next_move, and minimax and next_move with alpha-beta pruning was even faster. 
 
-Upon implementing iterative deepening without caching, the algorithm was slightly slower than the alpha-beta pruning implementation. This makes sense, due to the added overhead of depth increases. However, upon adding caching, the algorithm got significantly faster. This applies to depths from 5 and up. Below that, the overhead of iterative deepening and caching in Python seems to be slightly greater than the efficiency improvement, so alpha-beta pruning is slightly faster.
+Upon implementing iterative deepening without caching, the algorithm was slightly slower than the alpha-beta pruning implementation. This makes sense, due to the added overhead of depth increases. However, upon adding caching, the algorithm got significantly faster. This applies to depths from 4 and up. Below that, the overhead of iterative deepening and caching in Python seems to be slightly greater than the efficiency improvement, so alpha-beta pruning is slightly faster.
 
 ## Manual / End-to-end Testing
 
