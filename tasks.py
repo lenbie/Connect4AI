@@ -3,6 +3,10 @@ from invoke import task
 @task
 def start(ctx):
     ctx.run("python3 src/main.py", pty = True)
+
+@task
+def performance_test(ctx):
+    ctx.run("python3 src/main.py", pty = True)
     
 @task
 def test(ctx):
@@ -15,10 +19,6 @@ def coverage(ctx):
 @task(coverage)
 def coverage_report(ctx):
     ctx.run("coverage html", pty = True)
-
-@task
-def performance_test(ctx):
-    ctx.run("python3 src/main.py", pty = True)
 
 @task
 def lint(ctx):
