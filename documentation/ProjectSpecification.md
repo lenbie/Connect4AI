@@ -5,7 +5,7 @@ Project language: English
 
 This project aims to create a Connect4 game and bot, against which a human player can play.
 
-The project will be done in Java.
+The project will be done in Java. **UPDATE: This was changed to Python**
 
 ## Data Structures and Algorithms
 
@@ -20,7 +20,7 @@ A datastructure that will be used for representing the six-row, seven-column gam
 
 ## Program Input
 The program has a UI for the human player to interact with. Upon the player choosing to start the game, either the player or the AI will start, depending on the player's choice. When it is the player's turn, they can then input their move - drop a token into a column of the grid into the lowest possible free square. Upon the game's end, the player can choose to play again. The player can also terminate the game at any point.
-
+s
 
 ## Sources
 https://en.wikipedia.org/wiki/Connect_Four 
