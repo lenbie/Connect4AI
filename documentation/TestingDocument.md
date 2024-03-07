@@ -35,3 +35,13 @@ Upon implementing iterative deepening without caching, the algorithm was slightl
 ## Manual / End-to-end Testing
 
 Manual tests have been done through running classes indpendently with scenarios I created (e.g. making moves and testing the response at a certain point in the game). Also, debugging print statements were used a lot, especially to verify the minimax algorithm returns the correct evaluation scores, specifically in win/loss situations upon the next move. Moreover, I played the game a lot for end-to-end testing, acting as both players to test the AI's responses, and game play itself. Also, faulty user inputs were tested to see the game's response worked correctly.
+
+
+## Code Quality Checks
+Pylint was used for checking and improving code quality.
+
+The pylint report can be gotten using:
+
+```bash
+poetry run invoke lint
+```

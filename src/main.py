@@ -1,6 +1,6 @@
 from services.board import Board
-from UI.game import Game
 from services.ai import AI
+from UI.game import Game
 
 
 def main():

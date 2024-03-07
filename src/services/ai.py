@@ -195,7 +195,8 @@ class AI:
         by the minimax.
 
         Args:
-            window (list): A four-square section of the game board (horizontal, vertical or diagonal)
+            window (list): A four-square section of the game board
+                            (horizontal, vertical or diagonal)
             turn (int): The player whose turn it is
 
         Returns:
