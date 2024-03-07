@@ -23,6 +23,23 @@ class Game:
 
         self._win = False
         self._winner = None
+        
+    def show_board(self):
+        """UI Function: Board representation to print to command line.
+        """
+
+        print("+----+----+----+----+----+----+----+")
+        for row in range(6):
+            print("|", end="")
+            for col in range(7):
+                if self.board.board[row][col] == 0:
+                    print("    |", end="")
+                elif self.board.board[row][col] == 1:
+                    print(" 🟡 |", end="")
+                else:
+                    print(" 🔴 |", end="")
+            print()
+            print("+----+----+----+----+----+----+----+")
 
     def play_game(self):
         """Main game loop, managing the AI and human player
@@ -108,7 +125,7 @@ class Game:
         self._check_win(player)
 
         print("AI Move: ")
-        self.board.show_board()
+        self.show_board()
 
     def _player_move(self):
         """Manages the human player making moves via asking for input.
@@ -135,7 +152,7 @@ class Game:
         self._check_win(player)
 
         print("\nYour move: ")
-        self.board.show_board()
+        self.show_board()
 
     def _select_start_player(self):
         """Manages the choice for starting player via terminal input.

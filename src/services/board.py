@@ -17,23 +17,6 @@ class Board:
         self.board = [[0 for i in range(WIDTH)] for j in range(
             HEIGHT)]  # 0 represents empty cell
 
-    def show_board(self):
-        """UI Function: Board representation to print to command line.
-        """
-
-        print("+----+----+----+----+----+----+----+")
-        for row in range(6):
-            print("|", end="")
-            for col in range(7):
-                if self.board[row][col] == 0:
-                    print("    |", end="")
-                elif self.board[row][col] == 1:
-                    print(" 🟡 |", end="")
-                else:
-                    print(" 🔴 |", end="")
-            print()
-            print("+----+----+----+----+----+----+----+")
-
     def check_valid_move(self, column_index):
         """Checks if a token can be dropped into the chosen column
         Args:
@@ -273,9 +256,3 @@ class Board:
             The content of the specified square (int)
         """
         return self.board[row_index][column_index]
-
-
-if __name__ == "__main__":
-    board = Board()
-    board.make_move(3, 1)
-    board.show_board()

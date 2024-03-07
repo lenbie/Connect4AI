@@ -2,7 +2,7 @@
 
 ## Program Structure
 
-The program is divided into four main classes, AI, Game, Board and Main. Main is called to start the game, and then calls the Game class. This class handles the actual game play by the user. It gets inputs through the command line, handles the start of the game (player choice), consecutive move-making by the human and AI player, and win and draw situation, i.e. printing corresponding messages and giving the option to play again. The AI class is responsible for finding the moves for the AI player to make. It does so using the minimax algorithm with alpha beta pruning and soon also iterative deepening and caching and a heuristic evaluation function. The Board class handles everything to do with the actual game board -- making moves onto the board, checking for valid moves and wins.
+The program is divided into four main classes, AI, Game, Board and Main. Main is called to start the game, and then calls the Game class. This class is the UI class and handles the actual game play by the user. It gets inputs through the command line, handles displaying the game board, the start of the game (player choice), consecutive move-making by the human and AI player, and win and draw situation, i.e. printing corresponding messages and giving the option to play again. The AI class is responsible for finding the moves for the AI player to make. It does so using the minimax algorithm with alpha beta pruning and soon also iterative deepening and caching and a heuristic evaluation function. The Board class handles everything to do with the actual game board -- making moves onto the board, checking for valid moves and wins.
 
 ## Time and Space Complexities achieved
 

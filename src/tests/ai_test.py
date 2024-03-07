@@ -198,11 +198,6 @@ class TestAI(unittest.TestCase):
 
         self.assertEqual(score > 10000, True)
         self.assertEqual(found_move, True)
-
-
-# minimax losses, wins further away?
-# more extensive cache testing? 
-# alpha beta pruning tests
     
     def test_evaluate_window_favourable(self):
         """Tests whether a favourable window to the current
