@@ -28,7 +28,7 @@ The coverage report can be viewed from index.html in htmlcov.
 
 As of submitting the project on 08.03.24, there are 64 tests. All tests pass in 0.42 seconds. 
 
-![Test Coverage Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/CoverageReport.png)
+![Test Coverage Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/coverage-report.png)
 
 ## Performance Testing
 
