@@ -6,11 +6,14 @@ The program is divided into four main classes, AI, Game, Board and Main. Main is
 
 ## Time and Space Complexities achieved
 
-*From theory (not evaluated yet specific to this project):*
-- *Time complexity of Minimax: O(b^m) b = branching factor of treee, m = maximum depth of tree*
-- *Space complexity of Minimax: O(bm)*
-- *Time complexity of Minimax with Alpha-beta pruning: worst case O(b^m), ideally O(b^(m/2))*
-- *Space complexity of Minimax with Alpha-beta pruning: (bm)*
+The theoretical time and space complexities of minimax and alpha beta pruning are as follows:
+- Time complexity of Minimax: O(b^m) b = branching factor of tree, m = maximum depth of tree
+- Time complexity of Minimax with Alpha-beta pruning: worst case O(b^m), ideally O(b^(m/2))
+- Space complexity of Minimax = O(bm)
+
+- Looking at my connect 4 game, the branching factor is at most 7 (number of columns), and the maximum depth is the max depth of the iterative deepening and minimax, set in the AI class.
+- Since I have the added optimizations for alpha-beta pruning of iterative deepening and caching, and the optimized move ordering focusing on the centre columns, the time complexity of my algorithm likely lies between the worst case of O(b^m), which is the same as the simple minimax, and the ideal case of O(b^(m/2)). My algorithm is not optimized enough to achieve this lower bound, but it is more optimized compared to simple minimax, hence, it sits in between.
+- Space complexity also likely does not differ much from the theory - while pruning branches should reduce the needed space, caching uses additional space. The exact space complexity depends on how much is pruned, and how much space the cache takes. Since I am able to use the Python dictionary as a cache, the needed space is moderate, but my caching is also not optimized (see below).
 
 ## Shortcomings and Suggested Improvements
 
