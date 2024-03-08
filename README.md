@@ -5,9 +5,12 @@
 ## Documentation
 
 [Project Specification](https://github.com/lenbie/Connect4AI/blob/main/documentation/ProjectSpecification.md)
-[Implementation Document]()
-[Testing Document]()
-[User Manual]()
+
+[Implementation Document](https://github.com/lenbie/Connect4AI/blob/main/documentation/ImplementationDocument.md)
+
+[Testing Document](https://github.com/lenbie/Connect4AI/blob/main/documentation/TestingDocument.md)
+
+[User Manual](https://github.com/lenbie/Connect4AI/blob/main/documentation/UserManual.md)
 
 ### Weekly Reports
 
