@@ -52,7 +52,7 @@ I also tried playing the AI against itself, to see whether the first player woul
 
 
 ## Code Quality Checks
-Pylint was used for checking and improving code quality.
+Pylint was used for checking and improving code quality. As of 08.03.24, the code is rated 9.69/10.
 
 The pylint report can be gotten using:
 

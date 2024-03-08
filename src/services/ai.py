@@ -36,7 +36,7 @@ class AI:
 
         cache = {}
 
-        #Iterative deepening
+        # Iterative deepening
         start_time = time.time()
 
         for depth in range(1, max_depth + 1):
@@ -59,7 +59,7 @@ class AI:
                 self.board.make_move(move, ai_player)
                 move_count += 1
 
-                #Change turn, since AI player just made a move
+                # Change turn, since AI player just made a move
                 turn = 2 if ai_player == 1 else 1
 
                 minimax = self.minimax(
@@ -93,33 +93,32 @@ class AI:
                                 and game state value belonging to that move
         """
 
-        #Create cache key for the current board state
+        # Create cache key for the current board state
         state = tuple(map(tuple, self.board.board))
         cache_key = (state, turn)
 
-
-        #Check whether the previous player's turn led to a win and score accordingly
+        # Check whether the previous player's turn led to a win and score accordingly
         if self.board.check_four_connected():
             if turn != ai_player:
                 return 1000000 + depth, prev_move
             return -1000000 - depth, prev_move
 
-        #Check whether there is a draw
+        # Check whether there is a draw
         if move_count == 42:
             return 0, prev_move
 
-        #Check if depth has reached 0, if yes, return board state evaluation for the current player
+        # Check if depth has reached 0, if yes, return board state evaluation for the current player
         if depth == 0:
             score = self.evaluate_board(ai_player, turn)
             return score, prev_move
-        
-        #If current board state in cache, put best move to the front of moves list
+
+        # If current board state in cache, put best move to the front of moves list
         moves = self.get_possible_moves()
         if cache_key in cache:
             moves.remove(cache[cache_key][1])
             moves.insert(0, cache[cache_key][1])
 
-        #Maximising player turn
+        # Maximising player turn
         if turn == ai_player:
             max_value = VERY_SMALL_NUMBER
             for move in moves:
@@ -144,7 +143,7 @@ class AI:
 
             return max_value, best_move
 
-        #Minimizing player turn
+        # Minimizing player turn
         min_value = VERY_LARGE_NUMBER
         for move in moves:
             self.board.make_move(move, turn)
@@ -206,13 +205,13 @@ class AI:
 
         score = 0
 
-        #Giving points for favourable positions of the current player
+        # Giving points for favourable positions of the current player
         if window.count(turn) == 3 and window.count(0) == 1:
             score += 100
         if window.count(turn) == 2 and window.count(0) == 2:
             score += 10
 
-        #Subtracting points for favourable positions of the opponent
+        # Subtracting points for favourable positions of the opponent
         if window.count(3 - turn) == 3 and window.count(0) == 1:
             score -= 100
         if window.count(3 - turn) == 2 and window.count(0) == 2:
@@ -223,7 +222,7 @@ class AI:
     def evaluate_board(self, ai_player, turn):
         """Main heuristic evaluation function. Splits the game board into window sections 
         to be evaluated by the _evaluate_window function.
-        
+
         Args:
             ai_player (int): The player number of the ai_player in the current game
             turn (int): The player whose turn it currently is
@@ -232,35 +231,35 @@ class AI:
             score (int): The overall heuristic score of the position for the maximizing player.
         """
         score = 0
-        #Checking windows in rows
+        # Checking windows in rows
         for row in range(6):
             for col in range(4):
                 window = [self.board.board[row][col], self.board.board[row][col + 1],
                           self.board.board[row][col + 2], self.board.board[row][col + 3]]
                 score += self._evaluate_window(window, turn)
 
-        #Checking column windows
+        # Checking column windows
         for row in range(3):
             for col in range(7):
                 window = [self.board.board[row][col], self.board.board[row + 1][col],
                           self.board.board[row + 2][col], self.board.board[row + 3][col]]
                 score += self._evaluate_window(window, turn)
 
-        #Checkinf right downward diagonals
+        # Checkinf right downward diagonals
         for row in range(3):
             for col in range(4):
                 window = [self.board.board[row][col], self.board.board[row + 1][col + 1],
                           self.board.board[row + 2][col + 2], self.board.board[row + 3][col + 3]]
                 score += self._evaluate_window(window, turn)
 
-        #Checking left downward diagonals
+        # Checking left downward diagonals
         for row in range(3):
             for col in range(3, 7):
                 window = [self.board.board[row][col], self.board.board[row + 1][col - 1],
                           self.board.board[row + 2][col - 2], self.board.board[row + 3][col - 3]]
                 score += self._evaluate_window(window, turn)
 
-        #Return score depending on whether it is the maximising or minimizing player's turn.
+        # Return score depending on whether it is the maximising or minimizing player's turn.
         if ai_player == turn:
             return score
         return -score

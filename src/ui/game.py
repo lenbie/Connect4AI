@@ -23,7 +23,7 @@ class Game:
 
         self._win = False
         self._winner = None
-        
+
     def show_board(self):
         """UI Function: Board representation to print to command line.
         """
@@ -70,7 +70,7 @@ class Game:
                     move_count += 1
                     self._check_draw(move_count)
 
-        #Determining winner, progressing to game end or next game
+        # Determining winner, progressing to game end or next game
         if self._winner == 1:
             colour = "🟡"
         if self._winner == 2:
@@ -138,7 +138,7 @@ class Game:
         choice = False
         while not choice:
             col = (input(
-            """\nInto which column from 0 (left) to 6(right) do you want to make a move?  """))
+                """\nInto which column from 0 (left) to 6(right) do you want to make a move?  """))
             try:
                 number = int(col)
                 if self.board.check_valid_move(number):

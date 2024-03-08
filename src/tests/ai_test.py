@@ -26,7 +26,7 @@ class TestAI(unittest.TestCase):
         move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
-    
+
     def test_next_move_first_two_moves_both_players(self):
         """ Tests whether the AI playing as both players follows
          the ideal first two moves, which is placing in the centre column (3).
@@ -38,7 +38,7 @@ class TestAI(unittest.TestCase):
 
         for i in range(5):
             player = 1
-            if i%2 == 0:
+            if i % 2 == 0:
                 player = 2
             move_count += 1
             move = self.ai.next_move(player, move_count)
@@ -70,7 +70,7 @@ class TestAI(unittest.TestCase):
         move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
-    
+
     def test_next_move_loss_player1(self):
         """Tests if the AI can prevent its own loss on the next move,
         if it is player 1
@@ -111,7 +111,7 @@ class TestAI(unittest.TestCase):
         move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
-    
+
     def test_next_move_loss_player2(self):
         """Tests if the AI can prevent its own loss on the next move,
         if it is player 2
@@ -131,7 +131,7 @@ class TestAI(unittest.TestCase):
         move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
-    
+
     def test_next_move_win_end_game(self):
         """Tests whether the AI can find the win if the board is quite full.
         """
@@ -152,7 +152,7 @@ class TestAI(unittest.TestCase):
         move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
-    
+
     def test_next_move_loss_end_game(self):
         """Tests whether the AI can prevent losing if the board is quite full.
         """
@@ -178,7 +178,7 @@ class TestAI(unittest.TestCase):
 
         test_board.clear_board()
 
-        test_board.board =[
+        test_board.board = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0, 0],
             [0, 2, 1, 2, 0, 0, 0],
@@ -198,7 +198,7 @@ class TestAI(unittest.TestCase):
 
         test_board.clear_board()
 
-        test_board.board =[
+        test_board.board = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0, 0],
             [0, 2, 1, 2, 0, 0, 0],
@@ -299,7 +299,7 @@ class TestAI(unittest.TestCase):
         # as part of the minimax and store evaluation in cache
 
         self.assertEqual(check, True)
-    
+
     def test_next_move_minimax_caching_depth_one(self):
         """Tests whether the correct entries are put into the cache at depth 1
         if the AI player starts, by simulating next_move at depth 1. 
@@ -309,7 +309,7 @@ class TestAI(unittest.TestCase):
         """
         test_board.clear_board()
 
-        #Create list of board states that should be in cache
+        # Create list of board states that should be in cache
         board_states = []
         state = test_board.board.copy()
         for col in range(7):
@@ -330,12 +330,13 @@ class TestAI(unittest.TestCase):
 
         cache = {}
 
-        moves = [3, 2, 4, 1, 5, 0, 6] #all moves available since no prior moves
+        # all moves available since no prior moves
+        moves = [3, 2, 4, 1, 5, 0, 6]
 
         for move in moves:
 
             test_board.make_move(move, ai_player)
-            move_count +=1
+            move_count += 1
 
             turn = 2 if ai_player == 1 else 1
 
@@ -348,15 +349,14 @@ class TestAI(unittest.TestCase):
                 best_move = move
 
             test_board.undo_move(move)
-            move_count -=1
-        
+            move_count -= 1
+
         check = True
         for key in cache:
             if key[0] not in board_states:
                 check = False
 
         self.assertEqual(check, True)
-
 
     def test_minimax_draw(self):
         """Tests whether the minimax returns the correct score and move if 
@@ -402,7 +402,7 @@ class TestAI(unittest.TestCase):
 
         self.assertEqual(score > 10000, True)
         self.assertEqual(found_move, True)
-    
+
     def test_evaluate_window_favourable(self):
         """Tests whether a favourable window to the current
             turn's player is correctly evaluated.
@@ -413,7 +413,7 @@ class TestAI(unittest.TestCase):
         score = self.ai._evaluate_window(window, turn)
 
         self.assertEqual(score, 100)
-    
+
     def test_evaluate_window_unfavourable(self):
         """Tests whether an unfavourable window to the current
             turn's player is correctly evaluated.
@@ -424,7 +424,7 @@ class TestAI(unittest.TestCase):
         score = self.ai._evaluate_window(window, turn)
 
         self.assertEqual(score, -100)
-    
+
     def test_evaluate_window_all_zeroes(self):
         """Tests whether a window with all zeroes
             is correctly evaluated.
@@ -453,8 +453,8 @@ class TestAI(unittest.TestCase):
             [0, 0, 0, 0, 1, 1, 0],
             [1, 1, 1, 0, 2, 2, 2]]
 
-        #We have three 1's and three 2's in the bottom row, score 100 - 100
-        #Also, two 1's in the row above, each with one opening on the side, score 10 + 10
+        # We have three 1's and three 2's in the bottom row, score 100 - 100
+        # Also, two 1's in the row above, each with one opening on the side, score 10 + 10
         # AI player == turn, so score is positive.
 
         expected_score = 20
@@ -483,7 +483,7 @@ class TestAI(unittest.TestCase):
 
         score = self.ai.evaluate_board(ai_player, turn)
         self.assertEqual(score, expected_score)
-    
+
     def test_evaluate_board_right_downward_diagonal(self):
         """Tests whether right downward diagonal scores are correctly evaluated.
         There are no horizontal, vertical or left downward scores other than 0 on the board.
@@ -493,7 +493,7 @@ class TestAI(unittest.TestCase):
         ai_player = 1
         turn = 1
 
-        #This cannot be tested with a real game situation, so this board would never occur.
+        # This cannot be tested with a real game situation, so this board would never occur.
         test_board.board = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -508,15 +508,15 @@ class TestAI(unittest.TestCase):
         self.assertEqual(score, expected_score)
 
     def test_evaluate_board_left_upward_diagonal(self):
-        #Tests whether left upward diagonal scores are correctly evaluated.
-        #There are no horizontal, vertical or left downward scores other than 0 on the board.
-        
+        # Tests whether left upward diagonal scores are correctly evaluated.
+        # There are no horizontal, vertical or left downward scores other than 0 on the board.
+
         test_board.clear_board()
 
         ai_player = 1
         turn = 1
 
-        #This cannot be tested with a real game situation, so this board would never occur.
+        # This cannot be tested with a real game situation, so this board would never occur.
         test_board.board = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -530,17 +530,16 @@ class TestAI(unittest.TestCase):
         score = self.ai.evaluate_board(ai_player, turn)
         self.assertEqual(score, expected_score)
 
-
     def test_evaluate_empty_board(self):
         """Tests if the empty board is correctly evaluated
         """
-        
+
         test_board.clear_board()
 
         ai_player = 1
         turn = 2
 
-        #This cannot be tested with a real game situation, so this board would never occur.
+        # This cannot be tested with a real game situation, so this board would never occur.
         test_board.board = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -553,9 +552,3 @@ class TestAI(unittest.TestCase):
 
         score = self.ai.evaluate_board(ai_player, turn)
         self.assertEqual(score, expected_score)
-
-
-
-       
-
-       
