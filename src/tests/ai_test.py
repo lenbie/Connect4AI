@@ -175,6 +175,8 @@ class TestAI(unittest.TestCase):
         self.assertEqual(move, expected_move)
 
     def test_next_move_win_mid_game(self):
+        """Tests whether the AI finds a win on the next move mid-game.
+        """
 
         test_board.clear_board()
 
@@ -195,6 +197,8 @@ class TestAI(unittest.TestCase):
         self.assertEqual(move, expected_move)
 
     def test_next_move_loss_mid_game(self):
+        """Tests whether the AI prevents its own loss on the next move mid-game.
+        """
 
         test_board.clear_board()
 
@@ -402,6 +406,31 @@ class TestAI(unittest.TestCase):
 
         self.assertEqual(score > 10000, True)
         self.assertEqual(found_move, True)
+
+    def test_minimax_loss(self):
+        """Tests whether the minimax returns the score of a loss, 
+        and the move to prevent losing on the next move.
+        """
+        test_board.clear_board()
+
+        test_board.board = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0],
+            [1, 1, 0, 0, 2, 0, 2],
+            [2, 2, 1, 2, 1, 0, 1],
+            [1, 2, 1, 1, 2, 1, 1],
+            [2, 1, 1, 1, 2, 1, 2]]
+
+        loss_prevention = 2
+
+        turn = 1
+        ai_player = 2
+
+        score, move = self.ai.minimax(
+            5, turn, VERY_SMALL_NUMBER, VERY_LARGE_NUMBER, 3, 26, ai_player, {})
+
+        self.assertEqual(score < -10000, True)
+        self.assertEqual(loss_prevention, move)
 
     def test_evaluate_window_favourable(self):
         """Tests whether a favourable window to the current

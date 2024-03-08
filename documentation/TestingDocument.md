@@ -26,7 +26,7 @@ The coverage report can be viewed from index.html in htmlcov.
 
 ### Current test coverage
 
-As of submitting the project on 08.03.24, testing coverage is 99% and there are 64 tests. All tests pass in 2.86 seconds. 
+As of submitting the project on 08.03.24, testing coverage is 99% and there are 65 tests. All tests pass in 3.03 seconds. 
 
 ![Test Coverage Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/coverage-report.png)
 
@@ -46,7 +46,7 @@ Upon implementing iterative deepening without caching, the algorithm was slightl
 
 ## Manual / End-to-end Testing
 
-Manual tests have been done through running classes indpendently with scenarios I created (e.g. making moves and testing the response at a certain point in the game). Also, debugging print statements were used a lot, especially to verify the minimax algorithm returns the correct evaluation scores, specifically in win/loss situations upon the next move. Moreover, I played the game a lot for end-to-end testing, acting as both players to test the AI's responses, and game play itself. Also, faulty user inputs were tested to see the game's response worked correctly.
+Manual tests have been done through running classes indpendently with scenarios I created (e.g. making moves and testing the response at a certain point in the game). Also, debugging print statements were used a lot, especially to verify the minimax algorithm returns the correct evaluation scores, specifically in win/loss situations upon the next move. Moreover, I played the game a lot for end-to-end testing, acting as both players to test the AI's responses, and game play itself. Also, faulty user inputs were tested to see the game's response worked correctly. This was the main method for testing the Game class, but other classes were also extensively tested this way.
 
 I also tried playing the AI against itself, to see whether the first player would always win, as it should in optimal game play. Since my AI cannot reach very high depths, it probably does not play ideally, but the first player did always win in my trials. 
 

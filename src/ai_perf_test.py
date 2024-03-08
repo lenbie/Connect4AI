@@ -462,7 +462,7 @@ if __name__ == "__main__":
     test_board = Board()
 
     # Set the desired depth here
-    depth = 10
+    depth = 8
 
     ai = AICopy(test_board, depth)
 
