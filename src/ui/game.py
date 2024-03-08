@@ -52,7 +52,7 @@ class Game:
 
         if self._human_player == 1:
             while not self._win:
-                self._player_move()
+                self._player_move(move_count)
                 move_count += 1
                 self._check_draw(move_count)
                 if not self._win:
@@ -66,7 +66,7 @@ class Game:
                 move_count += 1
                 self._check_draw(move_count)
                 if not self._win:
-                    self._player_move()
+                    self._player_move(move_count)
                     move_count += 1
                     self._check_draw(move_count)
 
@@ -111,23 +111,25 @@ class Game:
             print("\nDraw!")
             self._play_again()
 
-    def _ai_move(self, moves):
+    def _ai_move(self, move_count):
         """Manages the AI making moves.
         Prints the board once a move has been made.
 
         Args:
-            moves (int): number of moves in the game so far
+            move_count (int): number of moves in the game so far
         """
         player = self._ai_player
-        move = self._ai.next_move(player, moves)
+        move = self._ai.next_move(player, move_count)
 
         self.board.make_move(move, player)
         self._check_win(player)
 
         print("AI Move: ")
         self.show_board()
+        print(self.board.board)
 
-    def _player_move(self):
+
+    def _player_move(self, move_count):
         """Manages the human player making moves via asking for input.
         This includes re-prompting upon invalid input, making the move, and checking for win.
         Prints the board once a move has been made.
@@ -135,24 +137,28 @@ class Game:
 
         player = self._human_player
 
-        choice = False
-        while not choice:
-            col = (input(
-            """\nInto which column from 0 (left) to 6(right) do you want to make a move?  """))
-            try:
-                number = int(col)
-                if self.board.check_valid_move(number):
-                    self.board.make_move(number, player)
-                    choice = True
-                else:
-                    print("\nInput is not a valid move.")
-            except ValueError:
-                print("\nInput is not a valid integer.")
+        move = self._ai.next_move(player, move_count)
+
+        self.board.make_move(move, player)
+        #choice = False
+        #while not choice:
+        #    col = (input(
+        #    """\nInto which column from 0 (left) to 6(right) do you want to make a move?  """))
+        #    try:
+        #        number = int(col)
+        #        if self.board.check_valid_move(number):
+        #            self.board.make_move(number, player)
+        #            choice = True
+        #        else:
+        #            print("\nInput is not a valid move.")
+        #    except ValueError:
+        #        print("\nInput is not a valid integer.")
 
         self._check_win(player)
 
         print("\nYour move: ")
         self.show_board()
+        print(self.board.board)
 
     def _select_start_player(self):
         """Manages the choice for starting player via terminal input.

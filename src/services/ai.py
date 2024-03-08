@@ -30,7 +30,7 @@ class AI:
         min_score = VERY_LARGE_NUMBER  # beta
 
         best_move = 3
-        max_depth = 7
+        max_depth = 6
 
         move_time = 3
 
@@ -51,6 +51,7 @@ class AI:
 
             for move in moves:
                 # Time Limit exceeded, return best_move immediately
+                # Checking for the time limit after each move is better than at every depth
                 if time.time() - start_time >= move_time:
                     print("Time Exceeded")
                     return best_move

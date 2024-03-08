@@ -4,6 +4,12 @@
 
 Unit testing for this project is done using pytest. 
 
+Tests were created for the AI and Board classes and all their methods, where applicable testing realistic game situations, e.g. wins and losses on the next move to check next_move and minimax work correctly, and various inputs (e.g. invalid columns for making moves in the Board class). The test files can be found in the tests directory, and each test is accompanied brief comments explaining its working.
+
+The Game class was not unit tested, as it is a UI class. Instead, manual / end-to-end testing was used.
+
+### Running unit tests and creating reports
+
 Tests can be run using 
 
 ```bash
@@ -20,7 +26,7 @@ The coverage report can be viewed from index.html in htmlcov.
 
 ### Current test coverage
 
-As of 24.02., there are 15 tests. More test for the AI class in particular, but also the Game class will be added ASAP. However, the Game class is a UI class, so unit testing is not always appropriate here. Instead, manual testing was used. All tests pass in 0.42 seconds. 
+As of submitting the project on 08.03.24, there are 64 tests. All tests pass in 0.42 seconds. 
 
 ![Test Coverage Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/CoverageReport.png)
 
@@ -41,6 +47,8 @@ Upon implementing iterative deepening without caching, the algorithm was slightl
 ## Manual / End-to-end Testing
 
 Manual tests have been done through running classes indpendently with scenarios I created (e.g. making moves and testing the response at a certain point in the game). Also, debugging print statements were used a lot, especially to verify the minimax algorithm returns the correct evaluation scores, specifically in win/loss situations upon the next move. Moreover, I played the game a lot for end-to-end testing, acting as both players to test the AI's responses, and game play itself. Also, faulty user inputs were tested to see the game's response worked correctly.
+
+I also tried playing the AI against itself, to see whether the first player would always win, as it should in optimal game play. Since my AI cannot reach very high depths, it probably does not play ideally, but the first player did always win in my trials. 
 
 
 ## Code Quality Checks

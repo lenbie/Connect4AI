@@ -26,8 +26,31 @@ class TestAI(unittest.TestCase):
         move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
+    
+    def test_next_move_first_two_moves_both_players(self):
+        """ Tests whether the AI playing as both players follows
+         the ideal first two moves, which is placing in the centre column (3).
+        """
+        test_board.clear_board()
 
-    def test_win_next_move_player2(self):
+        move_count = 0
+        moves = set()
+
+        for i in range(5):
+            player = 1
+            if i%2 == 0:
+                player = 2
+            move_count += 1
+            move = self.ai.next_move(player, move_count)
+            moves.add(move)
+
+        expected_moves = False
+        if len(moves) == 1 and 3 in moves:
+            expected_moves = True
+
+        self.assertEqual(expected_moves, True)
+
+    def test_next_move_win_player2(self):
         """Tests if the AI can find its own win on the next move,
         if it is player 2
         """
@@ -47,8 +70,29 @@ class TestAI(unittest.TestCase):
         move = self.ai.next_move(player, move_count)
 
         self.assertEqual(move, expected_move)
+    
+    def test_next_move_loss_player1(self):
+        """Tests if the AI can prevent its own loss on the next move,
+        if it is player 1
+        """
+        test_board.clear_board()
+        test_board.make_move(0, 1)
+        test_board.make_move(1, 2)
+        test_board.make_move(5, 1)
+        test_board.make_move(2, 2)
+        test_board.make_move(5, 1)
+        test_board.make_move(3, 2)
+        test_board.make_move(0, 1)
 
-    def test_win_next_move_player1(self):
+        player = 1
+        move_count = 7
+        expected_move = 4
+
+        move = self.ai.next_move(player, move_count)
+
+        self.assertEqual(move, expected_move)
+
+    def test_next_move_win_player1(self):
         """Tests if the AI can find its own win on the next move,
         if it is player 1
         """
@@ -62,6 +106,108 @@ class TestAI(unittest.TestCase):
 
         player = 1
         move_count = 7
+        expected_move = 0
+
+        move = self.ai.next_move(player, move_count)
+
+        self.assertEqual(move, expected_move)
+    
+    def test_next_move_loss_player2(self):
+        """Tests if the AI can prevent its own loss on the next move,
+        if it is player 2
+        """
+        test_board.clear_board()
+        test_board.make_move(3, 1)
+        test_board.make_move(5, 2)
+        test_board.make_move(1, 1)
+        test_board.make_move(6, 2)
+        test_board.make_move(2, 1)
+        test_board.make_move(4, 2)
+
+        player = 2
+        move_count = 7
+        expected_move = 0
+
+        move = self.ai.next_move(player, move_count)
+
+        self.assertEqual(move, expected_move)
+    
+    def test_next_move_win_end_game(self):
+        """Tests whether the AI can find the win if the board is quite full.
+        """
+        test_board.clear_board()
+
+        test_board.board = [
+            [2, 1, 2, 2, 2, 0, 2],
+            [1, 2, 1, 1, 1, 0, 1],
+            [2, 2, 1, 2, 2, 2, 1],
+            [1, 1, 2, 1, 1, 1, 2],
+            [2, 2, 1, 2, 2, 2, 1],
+            [1, 1, 2, 1, 1, 1, 2]]
+
+        player = 1
+        move_count = 40
+        expected_move = 5
+
+        move = self.ai.next_move(player, move_count)
+
+        self.assertEqual(move, expected_move)
+    
+    def test_next_move_loss_end_game(self):
+        """Tests whether the AI can prevent losing if the board is quite full.
+        """
+        test_board.clear_board()
+
+        test_board.board = [
+            [2, 1, 2, 2, 2, 0, 2],
+            [1, 2, 1, 1, 1, 0, 1],
+            [2, 2, 1, 2, 2, 2, 1],
+            [1, 1, 2, 1, 1, 1, 2],
+            [2, 2, 1, 2, 2, 2, 1],
+            [1, 1, 2, 1, 1, 1, 2]]
+
+        player = 2
+        move_count = 40
+        expected_move = 5
+
+        move = self.ai.next_move(player, move_count)
+
+        self.assertEqual(move, expected_move)
+
+    def test_next_move_win_mid_game(self):
+
+        test_board.clear_board()
+
+        test_board.board =[
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0],
+            [0, 2, 1, 2, 0, 0, 0],
+            [0, 1, 2, 1, 0, 0, 0],
+            [0, 2, 1, 2, 2, 0, 0],
+            [1, 1, 2, 1, 1, 0, 2]]
+
+        player = 1
+        move_count = 17
+        expected_move = 0
+
+        move = self.ai.next_move(player, move_count)
+
+        self.assertEqual(move, expected_move)
+
+    def test_next_move_loss_mid_game(self):
+
+        test_board.clear_board()
+
+        test_board.board =[
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0],
+            [0, 2, 1, 2, 0, 0, 0],
+            [0, 1, 2, 1, 0, 0, 0],
+            [0, 2, 1, 2, 2, 0, 0],
+            [1, 1, 2, 1, 1, 0, 2]]
+
+        player = 2
+        move_count = 17
         expected_move = 0
 
         move = self.ai.next_move(player, move_count)
@@ -123,7 +269,7 @@ class TestAI(unittest.TestCase):
 
         self.assertEqual(moves, [])
 
-    def test_cache_entries(self):
+    def test_minimax_cache_entries(self):
         """Tests whether a necessary entry is present in the cache.
         """
         test_board.clear_board()
@@ -143,7 +289,7 @@ class TestAI(unittest.TestCase):
         state = test_board.board.copy()
         state[4][3] = 2
         state = tuple(map(tuple, state))
-        key = (state, turn, depth)
+        key = (state, turn)
 
         check = False
         for key in cache:
@@ -153,6 +299,64 @@ class TestAI(unittest.TestCase):
         # as part of the minimax and store evaluation in cache
 
         self.assertEqual(check, True)
+    
+    def test_next_move_minimax_caching_depth_one(self):
+        """Tests whether the correct entries are put into the cache at depth 1
+        if the AI player starts, by simulating next_move at depth 1. 
+        For that purpose, copied code from next_move except for the time limitation
+        and increasing depths, as this is not necessary at only depth 1.
+        Testing at much higher depth is infeasible as cache grows larger.
+        """
+        test_board.clear_board()
+
+        #Create list of board states that should be in cache
+        board_states = []
+        state = test_board.board.copy()
+        for col in range(7):
+            state[5][col] = 1
+            board = tuple(map(tuple, state))
+            key = (board, 2)
+            board_states.append(board)
+            state[5][col] = 0
+
+        ai_player = 1
+        depth = 1
+        move_count = 0
+
+        max_score = VERY_SMALL_NUMBER  # alpha
+        min_score = VERY_LARGE_NUMBER  # beta
+
+        best_move = 3
+
+        cache = {}
+
+        moves = [3, 2, 4, 1, 5, 0, 6] #all moves available since no prior moves
+
+        for move in moves:
+
+            test_board.make_move(move, ai_player)
+            move_count +=1
+
+            turn = 2 if ai_player == 1 else 1
+
+            minimax = self.ai.minimax(
+                depth, turn, max_score, min_score, move, move_count, ai_player, cache)
+            score = minimax[0]
+
+            if score > max_score:
+                max_score = score
+                best_move = move
+
+            test_board.undo_move(move)
+            move_count -=1
+        
+        check = True
+        for key in cache:
+            if key[0] not in board_states:
+                check = False
+
+        self.assertEqual(check, True)
+
 
     def test_minimax_draw(self):
         """Tests whether the minimax returns the correct score and move if 
