@@ -5,6 +5,9 @@
 ## Documentation
 
 [Project Specification](https://github.com/lenbie/Connect4AI/blob/main/documentation/ProjectSpecification.md)
+[Implementation Document]()
+[Testing Document]()
+[User Manual]()
 
 ### Weekly Reports
 
@@ -26,7 +29,7 @@ Note that Python version 3.10.12 was used for creating and testing this project.
 
 ## How to Play
 
-The game is currently played via command line. Follow the steps below to install the project and start the game.
+The game is played via command line. Follow the steps below to install the project and start the game.
 Then, enter inputs as prompted in the terminal. Columns are indexed from 0 (very left) to 6 (very right). Happy playing!
 
 # Installation
@@ -69,4 +72,11 @@ Create the pylint test report using:
 
 ```bash
 poetry run invoke lint
+```
+
+## Performance testing
+Performance tests can be run using:
+
+```bash
+poetry run invoke performance-test
 ```

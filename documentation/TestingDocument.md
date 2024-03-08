@@ -26,7 +26,7 @@ The coverage report can be viewed from index.html in htmlcov.
 
 ### Current test coverage
 
-As of submitting the project on 08.03.24, there are 64 tests. All tests pass in 0.42 seconds. 
+As of submitting the project on 08.03.24, testing coverage is 99% and there are 64 tests. All tests pass in 2.86 seconds. 
 
 ![Test Coverage Report](https://github.com/lenbie/Connect4AI/blob/main/documentation/coverage-report.png)
 
